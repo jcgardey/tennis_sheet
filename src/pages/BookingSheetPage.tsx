@@ -10,6 +10,7 @@ import { Datepicker } from '@/components/booking/DatePicker';
 import { CreateMatchModal } from '@/components/booking/CreateMatchModal';
 import { useCreateMatch } from '@/hooks/useCreateMatch';
 import { Button } from '@/components/ui/button';
+import { TSAlert } from '@/components/design-system/TSAlert';
 
 export default function BookingSheet() {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
@@ -39,7 +40,7 @@ export default function BookingSheet() {
   }
 
   if (error) {
-    return <p>Error al cargar las canchas</p>;
+    return <TSAlert status="error" message="Error while loading the courts" />;
   }
   return (
     <div className="min-h-screen bg-muted/30 p-8 font-sans text-foreground">
