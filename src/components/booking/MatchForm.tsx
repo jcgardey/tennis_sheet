@@ -8,6 +8,7 @@ import { CourtSelector } from '@/components/booking/CourtSelector';
 import { type CreateMatchData } from '@/services/courts';
 import dayjs, { type Dayjs } from 'dayjs';
 import { z } from 'zod';
+import { Field, FieldLabel } from '../ui/field';
 
 const matchFormSchema = z.object({
   courtId: z.number().min(1, 'Seleccione una cancha'),
@@ -127,8 +128,8 @@ export const MatchForm: React.FC<MatchFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label>Cancha</Label>
+      <Field>
+        <FieldLabel>Cancha</FieldLabel>
         <CourtSelector
           value={formData.courtId || undefined}
           onValueChange={(courtId: number) =>
@@ -138,10 +139,10 @@ export const MatchForm: React.FC<MatchFormProps> = ({
         {errors.courtId && (
           <span className="text-red-500 text-sm">{errors.courtId}</span>
         )}
-      </div>
+      </Field>
 
-      <div>
-        <Label>Fecha</Label>
+      <Field>
+        <FieldLabel>Fecha</FieldLabel>
         <Datepicker
           date={formData.date}
           onDateChange={(date) =>
@@ -151,10 +152,10 @@ export const MatchForm: React.FC<MatchFormProps> = ({
         {errors.date && (
           <span className="text-red-500 text-sm">{errors.date}</span>
         )}
-      </div>
+      </Field>
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
+        <Field>
           <TimePicker
             label="Hora de inicio"
             value={formData.startTime}
@@ -165,9 +166,9 @@ export const MatchForm: React.FC<MatchFormProps> = ({
           {errors.startTime && (
             <span className="text-red-500 text-sm">{errors.startTime}</span>
           )}
-        </div>
+        </Field>
 
-        <div>
+        <Field>
           <TimePicker
             label="Hora de fin"
             value={formData.endTime}
@@ -178,11 +179,11 @@ export const MatchForm: React.FC<MatchFormProps> = ({
           {errors.endTime && (
             <span className="text-red-500 text-sm">{errors.endTime}</span>
           )}
-        </div>
+        </Field>
       </div>
 
-      <div>
-        <Label htmlFor="playerName">Nombre del jugador</Label>
+      <Field>
+        <FieldLabel htmlFor="playerName">Nombre del jugador</FieldLabel>
         <Input
           id="playerName"
           type="text"
@@ -196,10 +197,12 @@ export const MatchForm: React.FC<MatchFormProps> = ({
         {errors.playerName && (
           <span className="text-red-500 text-sm">{errors.playerName}</span>
         )}
-      </div>
+      </Field>
 
-      <div>
-        <Label htmlFor="contactPhone">Teléfono de contacto (opcional)</Label>
+      <Field>
+        <FieldLabel htmlFor="contactPhone">
+          Teléfono de contacto (opcional)
+        </FieldLabel>
         <Input
           id="contactPhone"
           type="tel"
@@ -212,7 +215,7 @@ export const MatchForm: React.FC<MatchFormProps> = ({
         {errors.contactPhone && (
           <span className="text-red-500 text-sm">{errors.contactPhone}</span>
         )}
-      </div>
+      </Field>
 
       <div className="flex justify-end gap-2 pt-4">
         <Button
