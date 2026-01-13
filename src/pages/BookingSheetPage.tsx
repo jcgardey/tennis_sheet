@@ -11,6 +11,7 @@ import { CreateMatchModal } from '@/components/booking/CreateMatchModal';
 import { useCreateMatch } from '@/hooks/useCreateMatch';
 import { Button } from '@/components/ui/button';
 import { TSAlert } from '@/components/design-system/TSAlert';
+import { Spinner } from '@/components/ui/spinner';
 
 export default function BookingSheet() {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
@@ -36,11 +37,19 @@ export default function BookingSheet() {
   };
 
   if (isLoading) {
-    return <p>Cargando canchas</p>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner className="size-8" />
+      </div>
+    );
   }
 
   if (error) {
-    return <TSAlert status="error" message="Error while loading the courts" />;
+    return <TSAlert status="error" message="Error while loading courts" />;
+  }
+
+  if (courts?.length === 0) {
+    return <TSAlert status="warning" message="No courts available" />;
   }
   return (
     <div className="min-h-screen bg-muted/30 p-8 font-sans text-foreground">
