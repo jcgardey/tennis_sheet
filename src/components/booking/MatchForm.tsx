@@ -97,7 +97,7 @@ export const MatchForm: React.FC<MatchFormProps> = ({
 
     const matchData: CreateMatchData = {
       courtId: data.courtId,
-      start: startDateTime.toISOString(),
+      start: startDateTime,
       durationMinutes: calculateDuration(data.startTime, data.endTime),
       playerName: data.playerName,
       contactPhone: data.contactPhone || undefined,

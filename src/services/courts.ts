@@ -17,7 +17,7 @@ export interface Reservation {
   description: string;
 }
 export interface CreateMatchData {
-  start: string; // ISO string date time
+  start: Dayjs;
   durationMinutes: number;
   playerName: string;
   contactPhone?: string;
@@ -27,7 +27,10 @@ export interface CreateMatchData {
 export const createMatch = async (
   matchData: CreateMatchData
 ): Promise<void> => {
-  await api.post(`/courts/${matchData.courtId}/matches`, matchData);
+  await api.post(`/courts/${matchData.courtId}/matches`, {
+    ...matchData,
+    start: matchData.start.toISOString(),
+  });
 };
 export const getReservationsByCourtAndDate = async (
   courtId: number,
