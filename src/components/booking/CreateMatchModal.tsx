@@ -32,7 +32,7 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Nueva Reserva</DialogTitle>
+          <DialogTitle>New Reservation</DialogTitle>
         </DialogHeader>
         <MatchForm
           onSubmit={handleSubmit}
