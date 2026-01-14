@@ -52,7 +52,7 @@ export default function BookingSheet() {
     return <TSAlert status="warning" message="No courts available" />;
   }
   return (
-    <div className="min-h-screen bg-muted/30 p-8 font-sans text-foreground">
+    <div className="min-h-screen font-sans text-foreground">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header de la App */}
         <div className="flex flex-col gap-4 border-b border-border pb-4">
@@ -73,13 +73,9 @@ export default function BookingSheet() {
           </div>
         </div>
 
-        {/* Contenedor de la Grilla (Layout de Divs) */}
-        <Card>
+        <Card className="py-0">
           <div className="flex overflow-x-auto">
-            {/* Columna Fija de Horarios */}
             <TimeColumn />
-
-            {/* Columnas de Canchas */}
             {(courts ?? []).map((court) => (
               <CourtGrid key={court.id} court={court} date={selectedDate} />
             ))}

@@ -15,6 +15,7 @@ export interface Reservation {
   start: Dayjs;
   durationMinutes: number;
   description: string;
+  colorCode: string;
 }
 export interface CreateMatchData {
   start: Dayjs;

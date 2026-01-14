@@ -4,9 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Fondo blanco puro */
   --background: oklch(1 0 0);
-  /* Texto principal: Negro profundo */
   --foreground: oklch(0.15 0.01 200);
 
   --card: oklch(1 0 0);
@@ -14,34 +12,30 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0.01 200);
 
-  /* COLOR PRIMARIO: Amarillo Tenis vibrante */
   --primary: oklch(0.86 0.18 100);
-  /* Texto sobre amarillo: Negro para máximo contraste */
   --primary-foreground: oklch(0.15 0.01 200);
 
-  /* Secondary: Gris muy claro */
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.15 0.01 200);
 
-  /* Muted: Grises neutros para textos secundarios y fondos de hora */
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.55 0 0);
 
-  /* Accent: Igual al secondary para efectos de hover */
   --accent: oklch(0.96 0 0);
   --accent-foreground: oklch(0.15 0.01 200);
-
-  /* Destructive: Rojo de alerta estándar */
   --destructive: oklch(0.6 0.18 25);
   --destructive-foreground: oklch(0.98 0 0);
 
-  /* Bordes e Inputs: Grises neutros */
   --border: oklch(0.92 0 0);
   --input: oklch(0.92 0 0);
-  /* Ring: El anillo de enfoque usa el amarillo primario */
+ 
   --ring: oklch(0.86 0.18 100);
 
   --radius: 0.625rem;
+
+  --match: oklch(0.726 0.222 41.116);
+  --match-foreground: oklch(0.25 0.01 41.116);
+  
 }
 
 .dark {
@@ -96,6 +90,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --color-match-foreground: var(--match-foreground);
+  --color-match-background: var(--match);
   
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
