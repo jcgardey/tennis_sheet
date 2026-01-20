@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Datepicker } from '@/components/booking/DatePicker';
 import { TimePicker } from '@/components/booking/TimePicker';
 import { CourtSelector } from '@/components/booking/CourtSelector';
-import { type CreateMatchData } from '@/services/courts';
+import { type CreateReservationData } from '@/services/courts';
 import dayjs, { type Dayjs } from 'dayjs';
 import { z } from 'zod';
 import { Field, FieldError, FieldLabel } from '../ui/field';
@@ -16,7 +16,7 @@ const timeToMinutes = (time: string): number => {
   return hours * 60 + minutes;
 };
 
-const matchFormSchema = z
+const reservationFormSchema = z
   .object({
     courtId: z.number().min(1, 'Select a court.'),
     date: z.custom<Dayjs>((val) => dayjs.isDayjs(val), 'Select a date.'),
@@ -26,11 +26,8 @@ const matchFormSchema = z
     endTime: z
       .string()
       .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid end time'),
-    playerName: z
-      .string()
-      .min(1, 'Player name is required')
-      .max(100, 'Player name is too long'),
-    contactPhone: z.string().optional(),
+    description: z.string().max(100, 'Description is too long').optional(),
+    type: z.enum(['MATCH', 'LESSON']),
   })
   .refine(
     (data) => {
@@ -41,26 +38,26 @@ const matchFormSchema = z
     {
       message: 'End time must be after start time',
       path: ['endTime'],
-    }
+    },
   );
 
-export type MatchFormData = {
+export type ReservationFormData = {
   courtId: number;
   date: Dayjs;
   startTime: string;
   endTime: string;
-  playerName: string;
-  contactPhone?: string;
+  description?: string;
+  type: 'MATCH' | 'LESSON';
 };
 
-export interface MatchFormProps {
-  onSubmit: (data: CreateMatchData) => void;
+export interface ReservationFormProps {
+  onSubmit: (data: CreateReservationData) => void;
   onCancel: () => void;
-  initialData?: Partial<MatchFormData>;
+  initialData?: Partial<ReservationFormData>;
   isLoading: boolean;
 }
 
-export const MatchForm: React.FC<MatchFormProps> = ({
+export const ReservationForm: React.FC<ReservationFormProps> = ({
   onSubmit,
   onCancel,
   initialData,
@@ -70,16 +67,16 @@ export const MatchForm: React.FC<MatchFormProps> = ({
     handleSubmit,
     formState: { errors, isValid },
     control,
-  } = useForm<MatchFormData>({
+  } = useForm<ReservationFormData>({
     defaultValues: {
       courtId: initialData?.courtId || 0,
       date: initialData?.date || dayjs(),
       startTime: initialData?.startTime || '09:00',
       endTime: initialData?.endTime || '10:00',
-      playerName: initialData?.playerName || '',
-      contactPhone: initialData?.contactPhone || '',
+      description: initialData?.description || '',
+      type: initialData?.type || 'MATCH',
     },
-    resolver: zodResolver(matchFormSchema),
+    resolver: zodResolver(reservationFormSchema),
   });
 
   const calculateDuration = (startTime: string, endTime: string): number => {
@@ -88,21 +85,21 @@ export const MatchForm: React.FC<MatchFormProps> = ({
     return endMinutes - startMinutes;
   };
 
-  const processForm = async (data: MatchFormData) => {
+  const processForm = async (data: ReservationFormData) => {
     const startDateTime = data.date
       .hour(parseInt(data.startTime.split(':')[0]))
       .minute(parseInt(data.startTime.split(':')[1]))
       .second(0)
       .millisecond(0);
 
-    const matchData: CreateMatchData = {
+    const reservationData: CreateReservationData = {
       courtId: data.courtId,
       start: startDateTime,
       durationMinutes: calculateDuration(data.startTime, data.endTime),
-      playerName: data.playerName,
-      contactPhone: data.contactPhone || undefined,
+      description: data.description,
+      type: data.type,
     };
-    onSubmit(matchData);
+    onSubmit(reservationData);
   };
 
   return (
@@ -170,27 +167,13 @@ export const MatchForm: React.FC<MatchFormProps> = ({
       </div>
 
       <Controller
-        name="playerName"
+        name="description"
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel htmlFor="playerName">Description</FieldLabel>{' '}
+            <FieldLabel htmlFor="description">Description</FieldLabel>{' '}
             <Input {...field} />
-            <FieldError>{errors.playerName?.message}</FieldError>
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="contactPhone"
-        control={control}
-        render={({ field }) => (
-          <Field>
-            <FieldLabel htmlFor="contactPhone">
-              Contact Phone (optional)
-            </FieldLabel>{' '}
-            <Input {...field} />{' '}
-            <FieldError>{errors.contactPhone?.message}</FieldError>
+            <FieldError>{errors.description?.message}</FieldError>
           </Field>
         )}
       />

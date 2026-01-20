@@ -2,20 +2,25 @@ import TimeColumn from '@/components/booking/TimeColumn';
 import { useQuery } from '@tanstack/react-query';
 
 import { CourtGrid } from '@/components/booking/CourtGrid';
-import { getAllCourts, type CreateMatchData } from '@/services/courts';
+import { getAllCourts, type CreateReservationData } from '@/services/courts';
 import { Card } from '@/components/ui/card';
 import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { Datepicker } from '@/components/booking/DatePicker';
-import { CreateMatchModal } from '@/components/booking/CreateMatchModal';
-import { useCreateMatch } from '@/hooks/useCreateMatch';
+import { CreateReservationModal } from '@/components/booking/CreateReservationModal';
+import { useCreateReservation } from '@/hooks/useCreateReservation';
 import { Button } from '@/components/ui/button';
 import { TSAlert } from '@/components/design-system/TSAlert';
 import { Spinner } from '@/components/ui/spinner';
+import type { ReservationFormData } from '@/components/booking/ReservationForm';
 
 export default function BookingSheet() {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const [matchInitialData, setMatchInitialData] = useState<
+    Partial<ReservationFormData>
+  >({});
 
   const {
     data: courts,
@@ -23,8 +28,8 @@ export default function BookingSheet() {
     error,
   } = useQuery({ queryKey: ['courts'], queryFn: getAllCourts });
 
-  const { isPending: isCreatingMatch, mutateAsync: createMatch } =
-    useCreateMatch();
+  const { isPending: isCreatingReservation, mutateAsync: createReservation } =
+    useCreateReservation();
 
   const handleDateChange = (date: Dayjs | null) => {
     if (date) {
@@ -32,8 +37,18 @@ export default function BookingSheet() {
     }
   };
 
-  const handleCreateMatch = async (data: CreateMatchData) => {
-    await createMatch(data);
+  const handleCreateReservation = async (data: CreateReservationData) => {
+    await createReservation(data);
+  };
+
+  const handleShowReservationModal = () => {
+    setMatchInitialData({ date: selectedDate });
+    setIsCreateModalOpen(true);
+  };
+
+  const handleFreeSlotClick = (startTime: string, courtId: number) => {
+    setMatchInitialData({ startTime, courtId });
+    setIsCreateModalOpen(true);
   };
 
   if (isLoading) {
@@ -61,15 +76,14 @@ export default function BookingSheet() {
             <div className="w-1/5">
               <Datepicker date={selectedDate} onDateChange={handleDateChange} />
             </div>
-            <CreateMatchModal
+            <CreateReservationModal
               isOpen={isCreateModalOpen}
               onClose={() => setIsCreateModalOpen(false)}
-              onCreateMatch={handleCreateMatch}
-              isLoading={isCreatingMatch}
+              onCreateReservation={handleCreateReservation}
+              isLoading={isCreatingReservation}
+              initialData={matchInitialData}
             />
-            <Button onClick={() => setIsCreateModalOpen(true)}>
-              Crear Reserva
-            </Button>
+            <Button onClick={handleShowReservationModal}>Crear Reserva</Button>
           </div>
         </div>
 
@@ -77,7 +91,12 @@ export default function BookingSheet() {
           <div className="flex overflow-x-auto">
             <TimeColumn />
             {(courts ?? []).map((court) => (
-              <CourtGrid key={court.id} court={court} date={selectedDate} />
+              <CourtGrid
+                key={court.id}
+                court={court}
+                date={selectedDate}
+                onFreeSlotClick={handleFreeSlotClick}
+              />
             ))}
           </div>
         </Card>

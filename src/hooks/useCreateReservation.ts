@@ -1,11 +1,14 @@
-import { createMatch, type CreateMatchData } from '@/services/courts';
+import {
+  createReservation,
+  type CreateReservationData,
+} from '@/services/courts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-export const useCreateMatch = () => {
+export const useCreateReservation = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateMatchData) => createMatch(data),
+    mutationFn: (data: CreateReservationData) => createReservation(data),
     onSuccess: (_, dataSent) => {
       queryClient.invalidateQueries({
         queryKey: ['reservations', dataSent.courtId],

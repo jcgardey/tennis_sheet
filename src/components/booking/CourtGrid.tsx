@@ -13,11 +13,16 @@ import { ReservationSkeleton } from './ReservationSkeleton';
 interface CourtGridProps {
   court: Court;
   date: Dayjs;
+  onFreeSlotClick: (startTime: string, courtId: number) => void;
 }
 
 const getTime = (date: Dayjs) => date.format('HH:mm');
 
-export const CourtGrid: React.FC<CourtGridProps> = ({ court, date }) => {
+export const CourtGrid: React.FC<CourtGridProps> = ({
+  court,
+  date,
+  onFreeSlotClick,
+}) => {
   const {
     data: reservations = [],
     isLoading,
@@ -97,7 +102,13 @@ export const CourtGrid: React.FC<CourtGridProps> = ({ court, date }) => {
               renderedSlots.add(TIME_SLOTS[TIME_SLOTS.indexOf(time) + j]);
             }
 
-            return <FreeSlots key={time} size={freeSlots} />;
+            return (
+              <FreeSlots
+                key={time}
+                size={freeSlots}
+                onClick={() => onFreeSlotClick(time, court.id)}
+              />
+            );
           })}
       </div>
     </div>

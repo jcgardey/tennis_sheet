@@ -17,28 +17,28 @@ export interface Reservation {
   description: string;
   colorCode: string;
 }
-export interface CreateMatchData {
+export interface CreateReservationData {
   start: Dayjs;
   durationMinutes: number;
-  playerName: string;
-  contactPhone?: string;
+  description?: string;
   courtId: number;
+  type: 'MATCH' | 'LESSON';
 }
 
-export const createMatch = async (
-  matchData: CreateMatchData
+export const createReservation = async (
+  reservationData: CreateReservationData,
 ): Promise<void> => {
-  await api.post(`/courts/${matchData.courtId}/matches`, {
-    ...matchData,
-    start: matchData.start.toISOString(),
+  await api.post(`/courts/${reservationData.courtId}/reservations`, {
+    ...reservationData,
+    start: reservationData.start.toISOString(),
   });
 };
 export const getReservationsByCourtAndDate = async (
   courtId: number,
-  date: Dayjs
+  date: Dayjs,
 ): Promise<Reservation[]> => {
   const res = await api.get<Reservation[]>(
-    `/courts/${courtId}/reservations?date=${date.format('YYYY-MM-DD')}`
+    `/courts/${courtId}/reservations?date=${date.format('YYYY-MM-DD')}`,
   );
   return res.data.map((reservation) => ({
     ...reservation,

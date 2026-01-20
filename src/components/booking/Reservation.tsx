@@ -19,11 +19,10 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
       }}
     >
       <div
-        className="h-full bg-primary/10 border border-primary/30 text-primary rounded-lg p-3 shadow-sm flex flex-col justify-center gap-1 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-300"
+        className="h-full bg-primary/10 border text-primary rounded-lg p-3 shadow-sm flex flex-col justify-center gap-1 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-300"
         style={{
-          backgroundColor: `var(--${reservation.colorCode})`,
-          color: `var(--${reservation.colorCode}-foreground)`,
-          borderColor: `var(--${reservation.colorCode}-foreground)`,
+          color: `var(--${reservation.colorCode})`,
+          borderColor: `var(--${reservation.colorCode})`,
         }}
       >
         <div className="flex items-center gap-1.5 font-bold text-sm truncate">

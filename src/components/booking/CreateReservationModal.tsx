@@ -5,26 +5,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { MatchForm, type MatchFormData } from './MatchForm';
-import type { CreateMatchData } from '@/services/courts';
+import { ReservationForm, type ReservationFormData } from './ReservationForm';
+import type { CreateReservationData } from '@/services/courts';
 
-export interface CreateMatchModalProps {
+export interface CreateReservationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreateMatch: (data: CreateMatchData) => void;
-  initialData?: Partial<MatchFormData>;
+  onCreateReservation: (data: CreateReservationData) => void;
+  initialData?: Partial<ReservationFormData>;
   isLoading: boolean;
 }
 
-export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
+export const CreateReservationModal: React.FC<CreateReservationModalProps> = ({
   isOpen,
   onClose,
-  onCreateMatch,
+  onCreateReservation,
   initialData,
   isLoading,
 }) => {
-  const handleSubmit = (data: CreateMatchData) => {
-    onCreateMatch(data);
+  const handleSubmit = (data: CreateReservationData) => {
+    onCreateReservation(data);
     onClose();
   };
 
@@ -34,7 +34,7 @@ export const CreateMatchModal: React.FC<CreateMatchModalProps> = ({
         <DialogHeader>
           <DialogTitle>New Reservation</DialogTitle>
         </DialogHeader>
-        <MatchForm
+        <ReservationForm
           onSubmit={handleSubmit}
           onCancel={onClose}
           initialData={initialData}
