@@ -2,7 +2,11 @@ import TimeColumn from '@/components/booking/TimeColumn';
 import { useQuery } from '@tanstack/react-query';
 
 import { CourtGrid } from '@/components/booking/CourtGrid';
-import { getAllCourts, type CreateReservationData } from '@/services/courts';
+import {
+  getAllCourts,
+  type Court,
+  type CreateReservationData,
+} from '@/services/courts';
 import { Card } from '@/components/ui/card';
 import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
@@ -46,8 +50,8 @@ export default function BookingSheet() {
     setIsCreateModalOpen(true);
   };
 
-  const handleFreeSlotClick = (startTime: string, courtId: number) => {
-    setMatchInitialData({ startTime, courtId });
+  const handleFreeSlotClick = (startTime: string, court: Court) => {
+    setMatchInitialData({ startTime, court });
     setIsCreateModalOpen(true);
   };
 

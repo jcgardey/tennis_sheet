@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Datepicker } from '@/components/booking/DatePicker';
 import { TimePicker } from '@/components/booking/TimePicker';
-import { CourtSelector } from '@/components/booking/CourtSelector';
-import { type CreateReservationData } from '@/services/courts';
+import { CourtSelector } from '@/components/booking/CourtCombobox';
+import { type Court, type CreateReservationData } from '@/services/courts';
 import dayjs, { type Dayjs } from 'dayjs';
 import { z } from 'zod';
 import { Field, FieldError, FieldLabel } from '../ui/field';
@@ -18,7 +18,7 @@ const timeToMinutes = (time: string): number => {
 
 const reservationFormSchema = z
   .object({
-    courtId: z.number().min(1, 'Select a court.'),
+    court: z.object({ id: z.number(), name: z.string() }).nullable(),
     date: z.custom<Dayjs>((val) => dayjs.isDayjs(val), 'Select a date.'),
     startTime: z
       .string()
@@ -42,7 +42,7 @@ const reservationFormSchema = z
   );
 
 export type ReservationFormData = {
-  courtId: number;
+  court: Court | null;
   date: Dayjs;
   startTime: string;
   endTime: string;
@@ -69,7 +69,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     control,
   } = useForm<ReservationFormData>({
     defaultValues: {
-      courtId: initialData?.courtId || 0,
+      court: initialData?.court || null,
       date: initialData?.date || dayjs(),
       startTime: initialData?.startTime || '09:00',
       endTime: initialData?.endTime || '10:00',
@@ -93,7 +93,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       .millisecond(0);
 
     const reservationData: CreateReservationData = {
-      courtId: data.courtId,
+      courtId: data.court?.id || 0,
       start: startDateTime,
       durationMinutes: calculateDuration(data.startTime, data.endTime),
       description: data.description,
@@ -105,16 +105,16 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   return (
     <form onSubmit={handleSubmit(processForm)} className="space-y-4">
       <Controller
-        name="courtId"
+        name="court"
         control={control}
         render={({ field }) => (
           <Field>
             <FieldLabel>Court</FieldLabel>
             <CourtSelector
-              value={field.value || undefined}
-              onValueChange={(courtId: number) => field.onChange(courtId)}
+              value={field.value}
+              onValueChange={(court: Court | null) => field.onChange(court)}
             />
-            <FieldError>{errors.courtId?.message}</FieldError>
+            <FieldError>{errors.court?.message}</FieldError>
           </Field>
         )}
       />

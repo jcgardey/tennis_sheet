@@ -13,7 +13,7 @@ import { ReservationSkeleton } from './ReservationSkeleton';
 interface CourtGridProps {
   court: Court;
   date: Dayjs;
-  onFreeSlotClick: (startTime: string, courtId: number) => void;
+  onFreeSlotClick: (startTime: string, court: Court) => void;
 }
 
 const getTime = (date: Dayjs) => date.format('HH:mm');
@@ -106,7 +106,7 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
               <FreeSlots
                 key={time}
                 size={freeSlots}
-                onClick={() => onFreeSlotClick(time, court.id)}
+                onClick={() => onFreeSlotClick(time, court)}
               />
             );
           })}
