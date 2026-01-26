@@ -19,12 +19,13 @@ export const CourtCombobox: React.FC<CourtSelectorProps> = ({
   return (
     <TSCombobox
       items={courts}
-      itemToStringLabel={(court) => court.name}
-      itemToStringValue={(court) => court.id.toString()}
       value={value}
       onValueChange={onValueChange}
       placeholder={isLoading ? 'Loading courts...' : 'Select a court'}
+      itemToStringLabel={(court) => court.name}
+      itemToStringValue={(court) => court.id.toString()}
       isItemEqualToValue={(court, anotherCourt) => court.id === anotherCourt.id}
+      emptyMessage="No courts found."
     />
   );
 };

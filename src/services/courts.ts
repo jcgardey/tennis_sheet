@@ -1,5 +1,6 @@
 import api from '@/lib/api';
 import dayjs, { Dayjs } from 'dayjs';
+import type { Person } from './persons';
 
 export interface Court {
   id: number;
@@ -16,12 +17,17 @@ export interface Reservation {
   durationMinutes: number;
   description: string;
   colorCode: string;
+  players: Person[];
+  coach: Person | null;
 }
+
 export interface CreateReservationData {
   start: Dayjs;
   durationMinutes: number;
   description?: string;
   courtId: number;
+  coachId: number | null;
+  playerIds: number[];
   type: 'MATCH' | 'LESSON';
 }
 

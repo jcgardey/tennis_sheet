@@ -26,8 +26,14 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
         }}
       >
         <div className="flex items-center gap-1.5 font-bold text-sm truncate">
-          <User className="w-3.5 h-3.5" /> {reservation.description}
+          <User className="w-3.5 h-3.5" />{' '}
+          {reservation.players.length > 0
+            ? reservation.players.map((player) => player.name).join(' - ')
+            : reservation.description}
         </div>
+        {reservation.coach && (
+          <p className="font-medium text-sm">Coach: {reservation.coach.name}</p>
+        )}
         <div className="text-[10px] font-medium opacity-80 uppercase">
           {reservation.durationMinutes / 60} h
         </div>

@@ -5,35 +5,41 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
-} from '@/components/ui/combobox';
-import type { ComboboxRootProps } from '@base-ui/react';
+} from '../ui/combobox';
 
-interface TSComboboxProps<T> extends ComboboxRootProps<T> {
+interface TSComboboxProps<T> {
+  items: T[];
+  value?: T | null;
   onValueChange: (value: T | null) => void;
   placeholder?: string;
+  itemToStringLabel?: (item: T) => string;
+  itemToStringValue?: (item: T) => string;
+  isItemEqualToValue?: (item: T, value: T) => boolean;
+  emptyMessage?: string;
 }
 
 export const TSCombobox = <T,>({
   items,
   value,
   onValueChange,
+  placeholder = 'Select an option',
   itemToStringLabel,
   itemToStringValue,
-  placeholder = 'Select an option',
   isItemEqualToValue,
+  emptyMessage = 'No items found.',
 }: TSComboboxProps<T>) => {
   return (
     <Combobox
       items={items}
-      onValueChange={onValueChange}
       value={value}
+      onValueChange={onValueChange}
       itemToStringLabel={itemToStringLabel}
       isItemEqualToValue={isItemEqualToValue}
     >
       <ComboboxInput placeholder={placeholder} />
-      <ComboboxContent className="pointer-events-auto">
-        <ComboboxEmpty>No items found.</ComboboxEmpty>
-        <ComboboxList>
+      <ComboboxContent>
+        <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
+        <ComboboxList className="pointer-events-auto">
           {(item) => (
             <ComboboxItem
               key={itemToStringValue ? itemToStringValue(item) : String(item)}
