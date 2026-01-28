@@ -29,7 +29,7 @@ const timeToMinutes = (time: string): number => {
   return hours * 60 + minutes;
 };
 
-const reservationFormSchema = z
+const ReservationFormSchema = z
   .object({
     court: z
       .object({ id: z.number(), name: z.string() })
@@ -129,16 +129,7 @@ const reservationFormSchema = z
     },
   );
 
-export type ReservationFormData = {
-  court: Court | null;
-  date: Dayjs;
-  startTime: string;
-  endTime: string;
-  description?: string;
-  type: 'MATCH' | 'LESSON';
-  players: Person[];
-  coach: Person | null;
-};
+export type ReservationFormData = z.infer<typeof ReservationFormSchema>;
 
 export interface ReservationFormProps {
   onSubmit: (data: CreateReservationData) => void;
@@ -157,7 +148,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     handleSubmit,
     formState: { errors, isValid },
     control,
-  } = useForm<ReservationFormData>({
+  } = useForm({
     defaultValues: {
       court: initialData?.court || null,
       date: initialData?.date || dayjs(),
@@ -168,7 +159,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       players: initialData?.players || [],
       coach: initialData?.coach || null,
     },
-    resolver: zodResolver(reservationFormSchema),
+    resolver: zodResolver(ReservationFormSchema),
   });
 
   const { persons: coaches, isLoading: isLoadingCoaches } = usePersons('COACH');
@@ -187,7 +178,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       .millisecond(0);
 
     const reservationData: CreateReservationData = {
-      courtId: data.court?.id as number,
+      courtId: data.court.id,
       start: startDateTime,
       durationMinutes: calculateDuration(data.startTime, data.endTime),
       description: data.description,
