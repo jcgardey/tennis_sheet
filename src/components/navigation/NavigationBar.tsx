@@ -13,7 +13,7 @@ export const NavigationBar: React.FC = () => {
   return (
     <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center px-4">
-        <Link to="/" className="mr-8 flex items-center space-x-2">
+        <Link to="/sheet" className="mr-8 flex items-center space-x-2">
           <img src={logoImage} alt="Tennis Sheet" className="h-16 w-auto" />
         </Link>
 
