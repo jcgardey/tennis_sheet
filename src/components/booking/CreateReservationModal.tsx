@@ -9,6 +9,7 @@ import { ReservationForm } from './ReservationForm';
 import type { CreateReservationData } from '@/services/courts';
 import type { ReservationFormData } from '@/schemas/reservationSchemas';
 import { ScrollArea } from '../ui/scroll-area';
+import { Text } from '../design-system/Text';
 
 export interface CreateReservationModalProps {
   isOpen: boolean;
@@ -34,7 +35,9 @@ export const CreateReservationModal: React.FC<CreateReservationModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-h-screen">
         <DialogHeader>
-          <DialogTitle>New Reservation</DialogTitle>
+          <DialogTitle asChild>
+            <Text variant="h2">New Reservation</Text>
+          </DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[400px] pr-4">
           <ReservationForm

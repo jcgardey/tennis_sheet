@@ -4,6 +4,7 @@ import { TSCombobox } from '../design-system/TSCombobox';
 import { Button } from '../ui/button';
 import { X } from 'lucide-react';
 import { usePersons } from '@/hooks/usePersons';
+import { Text } from '../design-system/Text';
 
 interface PlayerComboboxProps {
   value: Person[];
@@ -46,7 +47,9 @@ export const PlayerCombobox: React.FC<PlayerComboboxProps> = ({
               key={player.id}
               className="px-3 py-1 text-sm flex items-center justify-between gap-2"
             >
-              <span>{player.name}</span>
+              <Text variant="small" className="text-primary">
+                {player.name}
+              </Text>
               <Button
                 variant="outline"
                 size={'icon-sm'}

@@ -9,6 +9,7 @@ import { FreeSlots } from './FreeSlots';
 import { ReservationComponent } from './Reservation';
 import { TSAlert } from '../design-system/TSAlert';
 import { ReservationSkeleton } from './ReservationSkeleton';
+import { Text } from '../design-system/Text';
 
 interface CourtGridProps {
   court: Court;
@@ -64,7 +65,7 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
       {/* Header de Cancha */}
       <div className="h-20 bg-muted/50 border-b border-border flex flex-col items-center justify-center gap-1">
         <MapPin className="w-4 h-4 text-primary" />
-        <span className="font-semibold text-sm">{court.name}</span>
+        <Text variant="h5">{court.name}</Text>
       </div>
 
       {/* Slots de Tiempo */}

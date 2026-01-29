@@ -16,7 +16,8 @@ import { useCreateReservation } from '@/hooks/useCreateReservation';
 import { Button } from '@/components/ui/button';
 import { TSAlert } from '@/components/design-system/TSAlert';
 import { Spinner } from '@/components/ui/spinner';
-import type { ReservationFormData } from '@/components/booking/ReservationForm';
+import { Text } from '@/components/design-system/Text';
+import type { ReservationFormData } from '@/schemas/reservationSchemas';
 
 export default function BookingSheet() {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
@@ -75,7 +76,7 @@ export default function BookingSheet() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header de la App */}
         <div className="flex flex-col gap-4 border-b border-border pb-4">
-          <h1 className="text-2xl font-bold tracking-tight">Reservas</h1>
+          <Text variant="h1">Reservas</Text>
           <div className="flex gap-8">
             <div className="w-1/5">
               <Datepicker date={selectedDate} onDateChange={handleDateChange} />

@@ -1,5 +1,6 @@
 import { SLOT_HEIGHT, TIME_SLOTS } from '@/consts/booking';
 import { Clock } from 'lucide-react';
+import { Text } from '../design-system/Text';
 
 export default function TimeColumn() {
   return (
@@ -12,10 +13,10 @@ export default function TimeColumn() {
           return (
             <div
               key={time}
-              className="flex items-center justify-center border-b border-border text-sm font-bold text-muted-foreground"
+              className="flex items-center justify-center border-b border-border"
               style={{ height: `${SLOT_HEIGHT * 2}px` }}
             >
-              {time.split(':')[0]}hs
+              <Text variant="large">{time.split(':')[0]}hs</Text>
             </div>
           );
         }
