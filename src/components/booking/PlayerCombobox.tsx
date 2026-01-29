@@ -39,25 +39,27 @@ export const PlayerCombobox: React.FC<PlayerComboboxProps> = ({
         }
         emptyMessage="No players found."
       />
-      <div className="mt-2 flex flex-col gap-2">
-        {value.map((player) => (
-          <div
-            key={player.id}
-            className="px-3 py-1 text-sm flex items-center justify-between gap-2"
-          >
-            <span>{player.name}</span>
-            <Button
-              variant="outline"
-              size={'icon-sm'}
-              onClick={() =>
-                onValueChange(value.filter((p) => p.id !== player.id))
-              }
+      {value.length > 0 && (
+        <div className="flex flex-col gap-2">
+          {value.map((player) => (
+            <div
+              key={player.id}
+              className="px-3 py-1 text-sm flex items-center justify-between gap-2"
             >
-              <X />
-            </Button>
-          </div>
-        ))}
-      </div>
+              <span>{player.name}</span>
+              <Button
+                variant="outline"
+                size={'icon-sm'}
+                onClick={() =>
+                  onValueChange(value.filter((p) => p.id !== player.id))
+                }
+              >
+                <X />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
     </Field>
   );
 };

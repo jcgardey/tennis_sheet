@@ -5,8 +5,7 @@ import { Datepicker } from '@/components/booking/DatePicker';
 import { TimePicker } from '@/components/booking/TimePicker';
 import { CourtCombobox } from '@/components/booking/CourtCombobox';
 import { type Court, type CreateReservationData } from '@/services/courts';
-import dayjs, { type Dayjs } from 'dayjs';
-import { z } from 'zod';
+import dayjs from 'dayjs';
 import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,113 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-
-const timeToMinutes = (time: string): number => {
-  const [hours, minutes] = time.split(':').map(Number);
-  return hours * 60 + minutes;
-};
-
-const ReservationFormSchema = z
-  .object({
-    court: z
-      .object({ id: z.number(), name: z.string() })
-      .nullable()
-      .refine((val) => val !== null, {
-        message: 'Please select a court',
-      }),
-    date: z.custom<Dayjs>((val) => dayjs.isDayjs(val), 'Select a date.'),
-    startTime: z
-      .string()
-      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid start time'),
-    endTime: z
-      .string()
-      .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid end time'),
-    description: z.string().max(100, 'Description is too long').optional(),
-    type: z.enum(['MATCH', 'LESSON']),
-    players: z.array(
-      z.object({
-        id: z.number(),
-        name: z.string(),
-        email: z.string(),
-        phone: z.string(),
-      }),
-    ),
-    coach: z
-      .object({
-        id: z.number(),
-        name: z.string(),
-        email: z.string(),
-        phone: z.string(),
-      })
-      .nullable(),
-  })
-  .refine(
-    (data) => {
-      const startMinutes = timeToMinutes(data.startTime);
-      const endMinutes = timeToMinutes(data.endTime);
-      return endMinutes > startMinutes;
-    },
-    {
-      message: 'End time must be after start time',
-      path: ['endTime'],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.type === 'MATCH') {
-        if (
-          data.players.length === 0 &&
-          (!data.description || data.description.trim() === '')
-        ) {
-          return false;
-        }
-      }
-      return true;
-    },
-    {
-      message:
-        'Description is required when no players are selected for a match',
-      path: ['description'],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.type === 'MATCH') {
-        return data.coach === null;
-      }
-      return true;
-    },
-    {
-      message: 'Coach must not be selected for a match',
-      path: ['coach'],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.type === 'LESSON') {
-        return data.coach !== null;
-      }
-      return true;
-    },
-    {
-      message: 'Coach is required for a lesson',
-      path: ['coach'],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.type === 'LESSON') {
-        return data.players.length > 0;
-      }
-      return true;
-    },
-    {
-      message: 'At least one player is required for a lesson',
-      path: ['players'],
-    },
-  );
-
-export type ReservationFormData = z.infer<typeof ReservationFormSchema>;
+import {
+  ReservationFormSchema,
+  type ReservationFormData,
+  type ReservationInputData,
+} from '@/schemas/reservationSchemas';
+import { timeToMinutes } from '@/lib/utils';
+import { ScrollArea } from '../ui/scroll-area';
 
 export interface ReservationFormProps {
   onSubmit: (data: CreateReservationData) => void;
@@ -144,21 +43,38 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   initialData,
   isLoading = false,
 }) => {
-  const {
-    handleSubmit,
-    formState: { errors, isValid },
-    control,
-  } = useForm({
-    defaultValues: {
+  const getDefaultValues = () => {
+    const type = initialData?.type ?? 'MATCH';
+    const defaultValues = {
       court: initialData?.court || null,
       date: initialData?.date || dayjs(),
       startTime: initialData?.startTime || '09:00',
       endTime: initialData?.endTime || '10:00',
       description: initialData?.description,
-      type: initialData?.type ?? 'MATCH',
       players: initialData?.players || [],
-      coach: initialData?.coach || null,
-    },
+    };
+
+    return type === 'MATCH'
+      ? {
+          ...defaultValues,
+          type: 'MATCH' as const,
+          coach: null,
+        }
+      : {
+          ...defaultValues,
+          type: 'LESSON' as const,
+          coach: (initialData as any)?.coach || null,
+        };
+  };
+
+  const {
+    handleSubmit,
+    formState: { errors, isValid },
+    control,
+    setValue,
+    watch,
+  } = useForm<ReservationInputData, unknown, ReservationFormData>({
+    defaultValues: getDefaultValues(),
     resolver: zodResolver(ReservationFormSchema),
   });
 
@@ -190,17 +106,22 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(processForm)}
-      className="space-y-4 no-scrollbar overflow-y-auto max-h-[80vh]"
-    >
+    <form onSubmit={handleSubmit(processForm)} className="space-y-4">
       <Controller
         name="type"
         control={control}
         render={({ field }) => (
           <Field>
             <FieldLabel>Reservation Type</FieldLabel>
-            <Select value={field.value} onValueChange={field.onChange}>
+            <Select
+              value={field.value}
+              onValueChange={(val) => {
+                if (val === 'MATCH') {
+                  setValue('coach', null);
+                }
+                field.onChange(val);
+              }}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a reservation type" />
               </SelectTrigger>
@@ -230,30 +151,29 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           </Field>
         )}
       />
+      <div className="flex gap-4">
+        <Controller
+          name="date"
+          control={control}
+          render={({ field }) => (
+            <Field className="flex-2">
+              <FieldLabel>Date</FieldLabel>
+              <Datepicker
+                date={field.value}
+                onDateChange={(date) => field.onChange(date || dayjs())}
+              />
+              <FieldError>{errors.date?.message}</FieldError>
+            </Field>
+          )}
+        />
 
-      <Controller
-        name="date"
-        control={control}
-        render={({ field }) => (
-          <Field>
-            <FieldLabel>Date</FieldLabel>
-            <Datepicker
-              date={field.value}
-              onDateChange={(date) => field.onChange(date || dayjs())}
-            />
-            <FieldError>{errors.date?.message}</FieldError>
-          </Field>
-        )}
-      />
-
-      <div className="grid grid-cols-2 gap-4">
         <Controller
           name="startTime"
           control={control}
           render={({ field }) => (
-            <Field>
+            <Field className="flex-1">
               <TimePicker
-                label="Start Time"
+                label="Start"
                 value={field.value}
                 onChange={(time) => field.onChange(time)}
               />
@@ -266,9 +186,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           name="endTime"
           control={control}
           render={({ field }) => (
-            <Field>
+            <Field className="flex-1">
               <TimePicker
-                label="End Time"
+                label="End"
                 value={field.value}
                 onChange={(time) => field.onChange(time)}
               />
@@ -291,30 +211,32 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         }}
       />
 
-      <Controller
-        name="coach"
-        control={control}
-        render={({ field }) => (
-          <Field>
-            <FieldLabel>Coach</FieldLabel>
-            <TSCombobox
-              items={coaches}
-              value={field.value || null}
-              onValueChange={(coach: Person | null) => field.onChange(coach)}
-              placeholder={
-                isLoadingCoaches ? 'Loading coaches...' : 'Select a coach'
-              }
-              itemToStringLabel={(coach) => coach.name}
-              itemToStringValue={(coach) => coach.id.toString()}
-              isItemEqualToValue={(coach, anotherCoach) =>
-                coach.id === anotherCoach.id
-              }
-              emptyMessage="No coaches found."
-            />
-            <FieldError>{errors.coach?.message}</FieldError>
-          </Field>
-        )}
-      />
+      {watch('type') === 'LESSON' && (
+        <Controller
+          name="coach"
+          control={control}
+          render={({ field }) => (
+            <Field>
+              <FieldLabel>Coach</FieldLabel>
+              <TSCombobox
+                items={coaches}
+                value={field.value || null}
+                onValueChange={(coach: Person | null) => field.onChange(coach)}
+                placeholder={
+                  isLoadingCoaches ? 'Loading coaches...' : 'Select a coach'
+                }
+                itemToStringLabel={(coach) => coach.name}
+                itemToStringValue={(coach) => coach.id.toString()}
+                isItemEqualToValue={(coach, anotherCoach) =>
+                  coach.id === anotherCoach.id
+                }
+                emptyMessage="No coaches found."
+              />
+              <FieldError>{errors.coach?.message}</FieldError>
+            </Field>
+          )}
+        />
+      )}
 
       <Controller
         name="description"
