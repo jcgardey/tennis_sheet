@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dialog';
 import { ReservationForm } from './ReservationForm';
 import type { CreateReservationData } from '@/services/courts';
-import type { ReservationFormData } from '@/schemas/reservationSchemas';
+import type { ReservationInputData } from '@/schemas/reservationSchemas';
 import { ScrollArea } from '../ui/scroll-area';
 import { Text } from '../design-system/Text';
 
@@ -15,7 +15,7 @@ export interface CreateReservationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCreateReservation: (data: CreateReservationData) => void;
-  initialData?: Partial<ReservationFormData>;
+  initialData?: Partial<ReservationInputData>;
   isLoading: boolean;
 }
 

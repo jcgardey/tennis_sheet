@@ -6,6 +6,7 @@ import {
   getAllCourts,
   type Court,
   type CreateReservationData,
+  type Reservation,
 } from '@/services/courts';
 import { Card } from '@/components/ui/card';
 import dayjs, { Dayjs } from 'dayjs';
@@ -17,14 +18,14 @@ import { Button } from '@/components/ui/button';
 import { TSAlert } from '@/components/design-system/TSAlert';
 import { Spinner } from '@/components/ui/spinner';
 import { Text } from '@/components/design-system/Text';
-import type { ReservationFormData } from '@/schemas/reservationSchemas';
+import type { ReservationInputData } from '@/schemas/reservationSchemas';
 
 export default function BookingSheet() {
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const [matchInitialData, setMatchInitialData] = useState<
-    Partial<ReservationFormData>
+    Partial<ReservationInputData>
   >({});
 
   const {

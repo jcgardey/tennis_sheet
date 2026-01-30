@@ -19,6 +19,7 @@ export interface Reservation {
   colorCode: string;
   players: Person[];
   coach: Person | null;
+  court: Court;
 }
 
 export interface CreateReservationData {
@@ -31,6 +32,16 @@ export interface CreateReservationData {
   type: 'MATCH' | 'LESSON';
 }
 
+export interface UpdateReservationData {
+  id: number;
+  start: Dayjs;
+  durationMinutes: number;
+  description?: string;
+  courtId: number;
+  coachId: number | null;
+  playerIds: number[];
+}
+
 export const createReservation = async (
   reservationData: CreateReservationData,
 ): Promise<void> => {
@@ -39,6 +50,7 @@ export const createReservation = async (
     start: reservationData.start.toISOString(),
   });
 };
+
 export const getReservationsByCourtAndDate = async (
   courtId: number,
   date: Dayjs,
@@ -50,4 +62,13 @@ export const getReservationsByCourtAndDate = async (
     ...reservation,
     start: dayjs(reservation.start),
   }));
+};
+
+export const updateReservation = async (
+  data: UpdateReservationData,
+): Promise<Reservation> => {
+  return await api.put(`/reservations/${data.id}`, {
+    ...data,
+    start: data.start.toISOString(),
+  });
 };

@@ -65,7 +65,7 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
       {/* Header de Cancha */}
       <div className="h-20 bg-muted/50 border-b border-border flex flex-col items-center justify-center gap-1">
         <MapPin className="w-4 h-4 text-primary" />
-        <Text variant="h5">{court.name}</Text>
+        <Text variant="h4">{court.name}</Text>
       </div>
 
       {/* Slots de Tiempo */}
