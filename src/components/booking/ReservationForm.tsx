@@ -28,13 +28,13 @@ import {
   type ReservationInputData,
 } from '@/schemas/reservationSchemas';
 import { timeToMinutes } from '@/lib/utils';
-import { ScrollArea } from '../ui/scroll-area';
 
 export interface ReservationFormProps {
   onSubmit: (data: CreateReservationData) => void;
   onCancel: () => void;
-  initialData?: Partial<ReservationFormData>;
+  initialData?: Partial<ReservationInputData>;
   isLoading: boolean;
+  action?: 'create' | 'edit';
 }
 
 export const ReservationForm: React.FC<ReservationFormProps> = ({
@@ -42,6 +42,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   onCancel,
   initialData,
   isLoading = false,
+  action = 'create',
 }) => {
   const getDefaultValues = () => {
     const type = initialData?.type ?? 'MATCH';
@@ -260,7 +261,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           Cancel
         </Button>
         <Button type="submit" disabled={isLoading || !isValid}>
-          {isLoading ? 'Creating...' : 'New Reservation'}
+          {action === 'create' ? 'Create' : 'Edit'} Reservation
         </Button>
       </div>
     </form>

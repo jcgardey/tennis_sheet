@@ -13,6 +13,7 @@ export const getAllCourts = async (): Promise<Court[]> => {
 };
 
 export interface Reservation {
+  id: number;
   start: Dayjs;
   durationMinutes: number;
   description: string;

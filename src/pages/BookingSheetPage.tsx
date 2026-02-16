@@ -6,7 +6,6 @@ import {
   getAllCourts,
   type Court,
   type CreateReservationData,
-  type Reservation,
 } from '@/services/courts';
 import { Card } from '@/components/ui/card';
 import dayjs, { Dayjs } from 'dayjs';
@@ -53,7 +52,13 @@ export default function BookingSheet() {
   };
 
   const handleFreeSlotClick = (startTime: string, court: Court) => {
-    setMatchInitialData({ startTime, court });
+    console.log(startTime);
+    const endTime = selectedDate
+      .set('hour', parseInt(startTime.split(':')[0]))
+      .set('minute', parseInt(startTime.split(':')[1]))
+      .add(1, 'hour')
+      .format('HH:mm');
+    setMatchInitialData({ startTime, endTime, court });
     setIsCreateModalOpen(true);
   };
 
