@@ -17,11 +17,13 @@ import { useState } from 'react';
 interface ReservationProps {
   reservation: Reservation;
   slots: number;
+  timeOffset: number;
 }
 
 export const ReservationComponent: React.FC<ReservationProps> = ({
   reservation,
   slots,
+  timeOffset,
 }) => {
   const { isPending, mutateAsync: updateReservation } = useUpdateReservation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -63,9 +65,11 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <div
-          className="p-1 cursor-pointer"
+          className="p-1 cursor-pointer absolute left-0 right-0"
           style={{
             height: `${SLOT_HEIGHT * slots}px`,
+            top: `${timeOffset}px`,
+            zIndex: 10,
           }}
         >
           <div
