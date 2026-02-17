@@ -55,7 +55,7 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
 
   return (
     <div className="flex-1 min-w-[220px] border-r border-border last:border-r-0">
-      <div className="h-20 bg-muted/50 border-b border-border flex flex-col items-center justify-center gap-1">
+      <div className="h-20 border-b border-border flex flex-col items-center justify-center gap-1">
         <MapPin className="w-4 h-4 text-primary" />
         <Text variant="h4">{court.name}</Text>
       </div>
