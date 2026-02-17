@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { MapPin } from 'lucide-react';
 import type React from 'react';
-import { FreeSlots } from './FreeSlots';
+import { TimeSlot } from './TimeSlot';
 import { ReservationComponent } from './Reservation';
 import { TSAlert } from '../design-system/TSAlert';
 import { ReservationSkeleton } from './ReservationSkeleton';
@@ -69,11 +69,11 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
         )}
         {!isLoading && !error && (
           <>
-            {TIME_SLOTS.map((time) => (
-              <FreeSlots
+            {TIME_SLOTS.map((time, index) => (
+              <TimeSlot
                 key={time}
-                size={1}
                 onClick={() => onFreeSlotClick(time, court)}
+                className={`${parseInt(time.split(':')[1]) === SLOT_DURATION_MINUTES && index !== TIME_SLOTS.length - 1 ? 'border-b' : ''}`}
               />
             ))}
 
