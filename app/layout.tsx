@@ -1,6 +1,6 @@
-// app/layout.tsx
-import type { Metadata } from 'node_modules/next/types'; // o usa el import estándar de Next
+import type { Metadata } from 'next';
 import '@/styles.css';
+import { NavigationBar } from '@/components/navigation/NavigationBar';
 
 export const metadata: Metadata = {
   title: 'Tennis Sheet',
@@ -14,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>
+        <NavigationBar />
+        {children}
+      </body>
     </html>
   );
 }
