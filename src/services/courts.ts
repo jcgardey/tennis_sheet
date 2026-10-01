@@ -68,8 +68,12 @@ export const getReservationsByCourtAndDate = async (
 export const updateReservation = async (
   data: UpdateReservationData,
 ): Promise<Reservation> => {
-  return await api.put(`/reservations/${data.id}`, {
+  const response = await api.put<Reservation>(`/reservations/${data.id}`, {
     ...data,
     start: data.start.toISOString(),
   });
+  return {
+    ...response.data,
+    start: dayjs(response.data.start),
+  };
 };
