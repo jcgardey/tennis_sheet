@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles.css';
 import { NavigationBar } from '@/components/navigation/NavigationBar';
+import AppProviders from '@/components/providers/AppProviders';
 
 export const metadata: Metadata = {
   title: 'Tennis Sheet',
@@ -16,7 +17,7 @@ export default function RootLayout({
     <html lang="es">
       <body>
         <NavigationBar />
-        {children}
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

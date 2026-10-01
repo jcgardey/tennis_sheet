@@ -1,20 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { NavigationBar } from './NavigationBar';
-
-// Mock Tanstack Router
-vi.mock('@tanstack/react-router', () => ({
-  Link: ({ to, children, className }: any) => (
-    <a href={to} className={className} data-testid={`link-${to.slice(1)}`}>
-      {children}
-    </a>
-  ),
-}));
-
-// Mock logo image
-vi.mock('@/assets/tennis_sheet_full_logo_transparent.png', () => ({
-  default: 'mocked-logo.png',
-}));
 
 describe('NavigationBar', () => {
   describe('Basic rendering', () => {
@@ -30,7 +16,7 @@ describe('NavigationBar', () => {
 
       const logo = screen.getByAltText('Tennis Sheet');
       expect(logo).toBeInTheDocument();
-      expect(logo).toHaveAttribute('src', 'mocked-logo.png');
+      expect(logo).toHaveAttribute('src', '/logo.png');
     });
 
     it('renders navigation items', () => {
@@ -38,9 +24,11 @@ describe('NavigationBar', () => {
 
       const courtsLink = screen.getByText('Courts');
       expect(courtsLink).toBeInTheDocument();
+      expect(courtsLink.closest('a')).toHaveAttribute('href', '/sheet');
 
       const coachesLink = screen.getByText('Coaches');
       expect(coachesLink).toBeInTheDocument();
+      expect(coachesLink.closest('a')).toHaveAttribute('href', '/sheet');
     });
   });
 
