@@ -1,0 +1,70 @@
+{
+  "Metadata": {
+    "description": "Una aplicación web para gestionar las reservas y los horarios de las pistas de tenis."
+  },
+  "Navigation": {
+    "courts": "Pistas",
+    "coaches": "Entrenadores",
+    "switchLanguage": "Cambiar idioma",
+    "english": "English",
+    "spanish": "Español"
+  },
+  "Home": {
+    "title": "Gestión de pistas de tenis",
+    "description": "Consulta los horarios y administra las reservas de las pistas.",
+    "openBooking": "Ver reservas"
+  },
+  "Booking": {
+    "title": "Reservas",
+    "errorLoadingCourts": "Error al cargar las pistas",
+    "noCourts": "No hay pistas disponibles",
+    "errorLoadingReservations": "Error al cargar las reservas",
+    "createReservation": "Crear reserva",
+    "newReservation": "Nueva reserva",
+    "editReservation": "Editar reserva",
+    "coach": "Entrenador: {name}"
+  },
+  "ReservationForm": {
+    "type": "Tipo de reserva",
+    "selectType": "Selecciona un tipo de reserva",
+    "match": "Partido",
+    "lesson": "Clase",
+    "court": "Pista",
+    "date": "Fecha",
+    "start": "Inicio",
+    "end": "Fin",
+    "players": "Jugadores",
+    "coach": "Entrenador",
+    "loadingCoaches": "Cargando entrenadores...",
+    "selectCoach": "Selecciona un entrenador",
+    "noCoaches": "No se encontraron entrenadores.",
+    "description": "Descripción",
+    "cancel": "Cancelar",
+    "create": "Crear",
+    "edit": "Guardar cambios",
+    "courtRequired": "Selecciona una pista",
+    "dateRequired": "Selecciona una fecha.",
+    "startTimeInvalid": "La hora de inicio no es válida",
+    "endTimeInvalid": "La hora de fin no es válida",
+    "descriptionTooLong": "La descripción es demasiado larga",
+    "matchDescriptionRequired": "La descripción es obligatoria si no se seleccionan jugadores para un partido",
+    "lessonPlayerRequired": "Se requiere al menos un jugador para una clase",
+    "endAfterStart": "La hora de fin debe ser posterior a la hora de inicio"
+  },
+  "Selectors": {
+    "loadingCourts": "Cargando pistas...",
+    "selectCourt": "Selecciona una pista",
+    "noCourts": "No se encontraron pistas.",
+    "loadingPlayers": "Cargando jugadores...",
+    "selectPlayers": "Selecciona jugadores",
+    "noPlayers": "No se encontraron jugadores.",
+    "chooseDate": "Elegir fecha",
+    "datePlaceholder": "1 de junio de 2025"
+  },
+  "Notifications": {
+    "created": "Reserva creada correctamente",
+    "createFailed": "No se pudo crear la reserva. Inténtalo de nuevo.",
+    "updated": "Reserva actualizada correctamente",
+    "updateFailed": "No se pudo actualizar la reserva."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "Metadata": {
+    "description": "A web app to manage tennis court reservations and schedules."
+  },
+  "Navigation": {
+    "courts": "Courts",
+    "coaches": "Coaches",
+    "switchLanguage": "Switch language",
+    "english": "English",
+    "spanish": "Español"
+  },
+  "Home": {
+    "title": "Tennis court management",
+    "description": "View schedules and manage court reservations.",
+    "openBooking": "View reservations"
+  },
+  "Booking": {
+    "title": "Reservations",
+    "errorLoadingCourts": "Error while loading courts",
+    "noCourts": "No courts available",
+    "errorLoadingReservations": "Error loading reservations",
+    "createReservation": "Create reservation",
+    "newReservation": "New reservation",
+    "editReservation": "Edit reservation",
+    "coach": "Coach: {name}"
+  },
+  "ReservationForm": {
+    "type": "Reservation type",
+    "selectType": "Select a reservation type",
+    "match": "Match",
+    "lesson": "Lesson",
+    "court": "Court",
+    "date": "Date",
+    "start": "Start",
+    "end": "End",
+    "players": "Players",
+    "coach": "Coach",
+    "loadingCoaches": "Loading coaches...",
+    "selectCoach": "Select a coach",
+    "noCoaches": "No coaches found.",
+    "description": "Description",
+    "cancel": "Cancel",
+    "create": "Create",
+    "edit": "Save changes",
+    "courtRequired": "Please select a court",
+    "dateRequired": "Select a date.",
+    "startTimeInvalid": "Invalid start time",
+    "endTimeInvalid": "Invalid end time",
+    "descriptionTooLong": "Description is too long",
+    "matchDescriptionRequired": "Description is required when no players are selected for a match",
+    "lessonPlayerRequired": "At least one player is required for a lesson",
+    "endAfterStart": "End time must be after start time"
+  },
+  "Selectors": {
+    "loadingCourts": "Loading courts...",
+    "selectCourt": "Select a court",
+    "noCourts": "No courts found.",
+    "loadingPlayers": "Loading players...",
+    "selectPlayers": "Select players",
+    "noPlayers": "No players found.",
+    "chooseDate": "Choose date",
+    "datePlaceholder": "June 01, 2025"
+  },
+  "Notifications": {
+    "created": "Reservation created successfully",
+    "createFailed": "Failed to create reservation. Please try again.",
+    "updated": "Reservation updated successfully",
+    "updateFailed": "Failed to update the reservation."
+  }
+}
