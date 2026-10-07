@@ -1,18 +1,18 @@
-import * as React from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Datepicker } from '@/components/booking/DatePicker';
-import { TimePicker } from '@/components/booking/TimePicker';
-import { CourtCombobox } from '@/components/booking/CourtCombobox';
-import { type Court, type CreateReservationData } from '@/services/courts';
-import dayjs from 'dayjs';
-import { Field, FieldError, FieldLabel } from '../ui/field';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { PlayerCombobox } from './PlayerCombobox';
-import { usePersons } from '@/hooks/usePersons';
-import { TSCombobox } from '../design-system/TSCombobox';
-import type { Person } from '@/services/persons';
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Datepicker } from "@/components/booking/DatePicker";
+import { TimePicker } from "@/components/booking/TimePicker";
+import { CourtCombobox } from "@/components/booking/CourtCombobox";
+import { type Court, type CreateReservationData } from "@/services/courts";
+import dayjs from "dayjs";
+import { Field, FieldError, FieldLabel } from "../ui/field";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlayerCombobox } from "./PlayerCombobox";
+import { usePersons } from "@/hooks/usePersons";
+import { TSCombobox } from "../design-system/TSCombobox";
+import type { Person } from "@/services/persons";
 import {
   Select,
   SelectContent,
@@ -21,20 +21,21 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from "../ui/select";
 import {
   ReservationFormSchema,
   type ReservationFormData,
   type ReservationInputData,
-} from '@/schemas/reservationSchemas';
-import { timeToMinutes } from '@/lib/utils';
+} from "@/schemas/reservationSchemas";
+import { timeToMinutes } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export interface ReservationFormProps {
   onSubmit: (data: CreateReservationData) => void;
   onCancel: () => void;
   initialData?: Partial<ReservationInputData>;
   isLoading: boolean;
-  action?: 'create' | 'edit';
+  action?: "create" | "edit";
 }
 
 export const ReservationForm: React.FC<ReservationFormProps> = ({
@@ -42,28 +43,32 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   onCancel,
   initialData,
   isLoading = false,
-  action = 'create',
+  action = "create",
 }) => {
+  const t = useTranslations("Booking");
+  const translateError = (message?: string) =>
+    message ? t(message as Parameters<typeof t>[0]) : undefined;
+
   const getDefaultValues = () => {
-    const type = initialData?.type ?? 'MATCH';
+    const type = initialData?.type ?? "MATCH";
     const defaultValues = {
       court: initialData?.court || null,
       date: initialData?.date || dayjs(),
-      startTime: initialData?.startTime || '09:00',
-      endTime: initialData?.endTime || '10:00',
+      startTime: initialData?.startTime || "09:00",
+      endTime: initialData?.endTime || "10:00",
       description: initialData?.description,
       players: initialData?.players || [],
     };
 
-    return type === 'MATCH'
+    return type === "MATCH"
       ? {
           ...defaultValues,
-          type: 'MATCH' as const,
+          type: "MATCH" as const,
           coach: null,
         }
       : {
           ...defaultValues,
-          type: 'LESSON' as const,
+          type: "LESSON" as const,
           coach: (initialData as any)?.coach || null,
         };
   };
@@ -79,7 +84,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     resolver: zodResolver(ReservationFormSchema),
   });
 
-  const { persons: coaches, isLoading: isLoadingCoaches } = usePersons('COACH');
+  const { persons: coaches, isLoading: isLoadingCoaches } = usePersons("COACH");
 
   const calculateDuration = (startTime: string, endTime: string): number => {
     const startMinutes = timeToMinutes(startTime);
@@ -89,8 +94,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
 
   const processForm = async (data: ReservationFormData) => {
     const startDateTime = data.date
-      .hour(parseInt(data.startTime.split(':')[0]))
-      .minute(parseInt(data.startTime.split(':')[1]))
+      .hour(parseInt(data.startTime.split(":")[0]))
+      .minute(parseInt(data.startTime.split(":")[1]))
       .second(0)
       .millisecond(0);
 
@@ -113,24 +118,24 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel>Reservation Type</FieldLabel>
+            <FieldLabel>{t("type")}</FieldLabel>
             <Select
               value={field.value}
               onValueChange={(val) => {
-                if (val === 'MATCH') {
-                  setValue('coach', null);
+                if (val === "MATCH") {
+                  setValue("coach", null);
                 }
                 field.onChange(val);
               }}
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a reservation type" />
+                <SelectValue placeholder={t("selectType")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>Reservation Type</SelectLabel>
-                  <SelectItem value="MATCH">Match</SelectItem>
-                  <SelectItem value="LESSON">Lesson</SelectItem>
+                  <SelectLabel>{t("type")}</SelectLabel>
+                  <SelectItem value="MATCH">{t("match")}</SelectItem>
+                  <SelectItem value="LESSON">{t("lesson")}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -143,12 +148,12 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel>Court</FieldLabel>
+            <FieldLabel>{t("court")}</FieldLabel>
             <CourtCombobox
               value={field.value}
               onValueChange={(court: Court | null) => field.onChange(court)}
             />
-            <FieldError>{errors.court?.message}</FieldError>
+            <FieldError>{translateError(errors.court?.message)}</FieldError>
           </Field>
         )}
       />
@@ -158,12 +163,12 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           control={control}
           render={({ field }) => (
             <Field className="flex-2">
-              <FieldLabel>Date</FieldLabel>
+              <FieldLabel>{t("date")}</FieldLabel>
               <Datepicker
                 date={field.value}
                 onDateChange={(date) => field.onChange(date || dayjs())}
               />
-              <FieldError>{errors.date?.message}</FieldError>
+              <FieldError>{translateError(errors.date?.message)}</FieldError>
             </Field>
           )}
         />
@@ -174,11 +179,13 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           render={({ field }) => (
             <Field className="flex-1">
               <TimePicker
-                label="Start"
+                label={t("start")}
                 value={field.value}
                 onChange={(time) => field.onChange(time)}
               />
-              <FieldError>{errors.startTime?.message}</FieldError>
+              <FieldError>
+                {translateError(errors.startTime?.message)}
+              </FieldError>
             </Field>
           )}
         />
@@ -189,11 +196,11 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           render={({ field }) => (
             <Field className="flex-1">
               <TimePicker
-                label="End"
+                label={t("end")}
                 value={field.value}
                 onChange={(time) => field.onChange(time)}
               />
-              <FieldError>{errors.endTime?.message}</FieldError>
+              <FieldError>{translateError(errors.endTime?.message)}</FieldError>
             </Field>
           )}
         />
@@ -212,28 +219,28 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         }}
       />
 
-      {watch('type') === 'LESSON' && (
+      {watch("type") === "LESSON" && (
         <Controller
           name="coach"
           control={control}
           render={({ field }) => (
             <Field>
-              <FieldLabel>Coach</FieldLabel>
+              <FieldLabel>{t("coachField")}</FieldLabel>
               <TSCombobox
                 items={coaches}
                 value={field.value || null}
                 onValueChange={(coach: Person | null) => field.onChange(coach)}
                 placeholder={
-                  isLoadingCoaches ? 'Loading coaches...' : 'Select a coach'
+                  isLoadingCoaches ? t("loadingCoaches") : t("selectCoach")
                 }
                 itemToStringLabel={(coach) => coach.name}
                 itemToStringValue={(coach) => coach.id.toString()}
                 isItemEqualToValue={(coach, anotherCoach) =>
                   coach.id === anotherCoach.id
                 }
-                emptyMessage="No coaches found."
+                emptyMessage={t("noCoaches")}
               />
-              <FieldError>{errors.coach?.message}</FieldError>
+              <FieldError>{translateError(errors.coach?.message)}</FieldError>
             </Field>
           )}
         />
@@ -244,9 +251,11 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel htmlFor="description">Description</FieldLabel>{' '}
+            <FieldLabel htmlFor="description">{t("description")}</FieldLabel>{" "}
             <Input {...field} />
-            <FieldError>{errors.description?.message}</FieldError>
+            <FieldError>
+              {translateError(errors.description?.message)}
+            </FieldError>
           </Field>
         )}
       />
@@ -258,10 +267,10 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           onClick={onCancel}
           disabled={isLoading}
         >
-          Cancel
+          {t("cancel")}
         </Button>
         <Button type="submit" disabled={isLoading || !isValid}>
-          {action === 'create' ? 'Create' : 'Edit'} Reservation
+          {t(action === "create" ? "create" : "edit")}
         </Button>
       </div>
     </form>
