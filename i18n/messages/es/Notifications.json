@@ -1,0 +1,6 @@
+{
+  "created": "Reserva creada correctamente",
+  "createFailed": "No se pudo crear la reserva. Inténtalo de nuevo.",
+  "updated": "Reserva actualizada correctamente",
+  "updateFailed": "No se pudo actualizar la reserva."
+}

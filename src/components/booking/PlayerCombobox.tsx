@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import { X } from 'lucide-react';
 import { usePersons } from '@/hooks/usePersons';
 import { Text } from '../design-system/Text';
+import { useTranslations } from 'next-intl';
 
 interface PlayerComboboxProps {
   value: Person[];
@@ -15,6 +16,7 @@ export const PlayerCombobox: React.FC<PlayerComboboxProps> = ({
   onValueChange,
   value,
 }) => {
+  const t = useTranslations('Booking');
   const { persons: players, isLoading } = usePersons('PLAYER');
 
   const handleValueChange = (selectedPlayer: Person | null) => {
@@ -25,20 +27,20 @@ export const PlayerCombobox: React.FC<PlayerComboboxProps> = ({
 
   return (
     <Field>
-      <FieldLabel>Players</FieldLabel>
+      <FieldLabel>{t('players')}</FieldLabel>
       <TSCombobox
         items={players.filter(
           (player) => !value.find((p) => p.id === player.id),
         )}
         value={null}
         onValueChange={handleValueChange}
-        placeholder={isLoading ? 'Loading players...' : 'Select players'}
+        placeholder={isLoading ? t('loadingPlayers') : t('selectPlayers')}
         itemToStringLabel={(player) => player.name}
         itemToStringValue={(player) => player.id.toString()}
         isItemEqualToValue={(player, anotherPlayer) =>
           player.id === anotherPlayer.id
         }
-        emptyMessage="No players found."
+        emptyMessage={t('noPlayers')}
       />
       {value.length > 0 && (
         <div className="flex flex-col gap-2">

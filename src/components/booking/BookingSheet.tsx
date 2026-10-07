@@ -12,12 +12,14 @@ import { useCreateReservation } from '@/hooks/useCreateReservation';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import type { ReservationInputData } from '@/schemas/reservationSchemas';
+import { useTranslations } from 'next-intl';
 
 interface BookingSheetClientProps {
   courts: Court[];
 }
 
 export default function BookingSheet({ courts }: BookingSheetClientProps) {
+  const t = useTranslations('Booking');
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [matchInitialData, setMatchInitialData] = useState<
@@ -67,7 +69,7 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
           initialData={matchInitialData}
         />
         <Button onClick={handleShowReservationModal}>
-          Crear Reserva
+          {t('createReservation')}
           {isCreatingReservation && <Spinner className="ml-2 size-4" />}
         </Button>
       </div>

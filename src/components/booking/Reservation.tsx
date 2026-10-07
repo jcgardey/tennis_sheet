@@ -13,6 +13,7 @@ import { ScrollArea } from '../ui/scroll-area';
 import { ReservationForm } from './ReservationForm';
 import { useUpdateReservation } from '@/hooks/useUpdateReservation';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface ReservationProps {
   reservation: Reservation;
@@ -23,6 +24,7 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
   reservation,
   slots,
 }) => {
+  const t = useTranslations('Booking');
   const { isPending, mutateAsync: updateReservation } = useUpdateReservation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -84,14 +86,16 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
               </Text>
             </div>
             {reservation.coach && (
-              <Text variant="small">Coach: {reservation.coach.name}</Text>
+              <Text variant="small">
+                {t('coach', { name: reservation.coach.name })}
+              </Text>
             )}
           </div>
         </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Reservation</DialogTitle>
+          <DialogTitle>{t('editReservation')}</DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[400px] pr-4">
           <ReservationForm

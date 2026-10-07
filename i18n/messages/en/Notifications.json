@@ -1,0 +1,6 @@
+{
+  "created": "Reservation created successfully",
+  "createFailed": "Failed to create reservation. Please try again.",
+  "updated": "Reservation updated successfully",
+  "updateFailed": "Failed to update the reservation."
+}

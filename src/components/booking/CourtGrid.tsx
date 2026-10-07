@@ -10,6 +10,7 @@ import { ReservationComponent } from './Reservation';
 import { TSAlert } from '../design-system/TSAlert';
 import { ReservationSkeleton } from './ReservationSkeleton';
 import { Text } from '../design-system/Text';
+import { useTranslations } from 'next-intl';
 
 interface CourtGridProps {
   court: Court;
@@ -24,6 +25,7 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
   date,
   onFreeSlotClick,
 }) => {
+  const t = useTranslations('Booking');
   const {
     data: reservations = [],
     isLoading,
@@ -73,7 +75,7 @@ export const CourtGrid: React.FC<CourtGridProps> = ({
         {isLoading && <ReservationSkeleton />}
         {!isLoading && error && (
           <div className="p-4">
-            <TSAlert status="error" message="Error loading reservations" />
+            <TSAlert status="error" message={t('errorLoadingReservations')} />
           </div>
         )}
         {!isLoading &&

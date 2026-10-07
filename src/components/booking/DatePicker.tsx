@@ -13,17 +13,18 @@ import {
 } from '@/components/ui/popover';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import { useLocale, useTranslations } from 'next-intl';
+import { enUS, es } from 'date-fns/locale';
+import { format, isValid, parse } from 'date-fns';
 
-function formatDate(date: Date | undefined) {
+const getDateFnsLocale = (locale: string) => (locale === 'es' ? es : enUS);
+
+function formatDate(date: Date | undefined, locale: string) {
   if (!date) {
     return '';
   }
 
-  return date.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
+  return format(date, 'PPP', { locale: getDateFnsLocale(locale) });
 }
 
 interface DatepickerProps {
@@ -35,27 +36,36 @@ export const Datepicker: React.FC<DatepickerProps> = ({
   date,
   onDateChange,
 }) => {
+  const locale = useLocale();
+  const t = useTranslations('Booking');
   const [open, setOpen] = React.useState(false);
 
   const [month, setMonth] = React.useState<Date | undefined>(
     date ? date.toDate() : undefined
   );
   const [value, setValue] = React.useState(
-    formatDate(date ? date.toDate() : undefined)
+    formatDate(date ? date.toDate() : undefined, locale)
   );
 
+  React.useEffect(() => {
+    setValue(formatDate(date?.toDate(), locale));
+  }, [date, locale]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const date = dayjs(e.target.value);
+    const parsedDate = parse(e.target.value, 'PPP', new Date(), {
+      locale: getDateFnsLocale(locale),
+    });
     setValue(e.target.value);
-    if (date.isValid()) {
-      onDateChange(date);
-      setMonth(date.toDate());
+    if (isValid(parsedDate)) {
+      const nextDate = dayjs(parsedDate);
+      onDateChange(nextDate);
+      setMonth(parsedDate);
     }
   };
 
   const handleDateSelect = (date: Date | undefined) => {
     onDateChange(date ? dayjs(date) : null);
-    setValue(formatDate(date));
+    setValue(formatDate(date, locale));
     setOpen(false);
   };
 
@@ -64,7 +74,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({
       <Input
         id="date"
         value={value}
-        placeholder="June 01, 2025"
+        placeholder={t('datePlaceholder')}
         className="bg-background pr-10"
         onChange={handleInputChange}
         onKeyDown={(e) => {
@@ -82,7 +92,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({
             className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
           >
             <CalendarIcon className="size-3.5" />
-            <span className="sr-only">Elegir fecha</span>
+            <span className="sr-only">{t('chooseDate')}</span>
           </Button>
         </PopoverTrigger>
         <PopoverContent
@@ -93,6 +103,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({
         >
           <Calendar
             mode="single"
+            locale={locale === 'es' ? es : enUS}
             selected={date?.toDate()}
             captionLayout="dropdown"
             month={month}

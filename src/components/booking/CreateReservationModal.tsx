@@ -11,6 +11,7 @@ import type { ReservationInputData } from '@/schemas/reservationSchemas';
 import { ScrollArea } from '../ui/scroll-area';
 import { Text } from '../design-system/Text';
 import type { DialogProps } from '@radix-ui/react-dialog';
+import { useTranslations } from 'next-intl';
 
 export interface CreateReservationModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export const CreateReservationModal: React.FC<CreateReservationModalProps> = ({
   initialData,
   isLoading,
 }) => {
+  const t = useTranslations('Booking');
   const handleCancel = () => {
     if (onClose) {
       onClose(false);
@@ -43,7 +45,7 @@ export const CreateReservationModal: React.FC<CreateReservationModalProps> = ({
       <DialogContent className="max-h-screen">
         <DialogHeader>
           <DialogTitle asChild>
-            <Text variant="h2">New Reservation</Text>
+            <Text variant="h2">{t('newReservation')}</Text>
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[400px] pr-4">
