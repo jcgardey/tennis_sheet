@@ -14,6 +14,7 @@ import {
 import { useLocale, useTranslations } from 'next-intl';
 import { enUS, es } from 'date-fns/locale';
 import { format, isValid, parse } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 const getDateFnsLocale = (locale: string) => (locale === 'es' ? es : enUS);
 
@@ -25,27 +26,20 @@ function formatDate(date: Date | undefined, locale: string) {
   return format(date, 'PPP', { locale: getDateFnsLocale(locale) });
 }
 
-interface DatepickerProps {
+interface DatePickerProps {
   date: Date | null;
   onDateChange: (date: Date | null) => void;
 }
 
-export const Datepicker: React.FC<DatepickerProps> = ({
-  date,
-  onDateChange,
-}) => {
+export default function DatePicker({ date, onDateChange }: DatePickerProps) {
   const locale = useLocale();
   const t = useTranslations('Booking');
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
-  const [month, setMonth] = React.useState<Date | undefined>(
-    date ?? undefined
-  );
-  const [value, setValue] = React.useState(
-    formatDate(date ?? undefined, locale)
-  );
+  const [month, setMonth] = useState<Date | undefined>(date ?? undefined);
+  const [value, setValue] = useState(formatDate(date ?? undefined, locale));
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(formatDate(date ?? undefined, locale));
   }, [date, locale]);
 
@@ -111,4 +105,4 @@ export const Datepicker: React.FC<DatepickerProps> = ({
       </Popover>
     </div>
   );
-};
+}

@@ -6,7 +6,7 @@ import type { Court, CreateReservationData } from '@/services/courts';
 import { Card } from '@/components/ui/card';
 import { addHours, format, setHours, setMinutes } from 'date-fns';
 import { useState } from 'react';
-import { Datepicker } from '@/components/booking/DatePicker';
+import DatePicker from '@/components/booking/DatePicker';
 import { CreateReservationModal } from '@/components/booking/CreateReservationModal';
 import { useCreateReservation } from '@/hooks/useCreateReservation';
 import { Button } from '@/components/ui/button';
@@ -58,7 +58,7 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
     <>
       <div className="flex flex-wrap items-center gap-4 py-4">
         <div className="w-full sm:w-1/5">
-          <Datepicker date={selectedDate} onDateChange={handleDateChange} />
+          <DatePicker date={selectedDate} onDateChange={handleDateChange} />
         </div>
         <CreateReservationModal
           isOpen={isCreateModalOpen}

@@ -1,18 +1,18 @@
-import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Datepicker } from "@/components/booking/DatePicker";
-import { TimePicker } from "@/components/booking/TimePicker";
-import { CourtCombobox } from "@/components/booking/CourtCombobox";
-import { type Court, type CreateReservationData } from "@/services/courts";
-import { setHours, setMilliseconds, setMinutes, setSeconds } from "date-fns";
-import { Field, FieldError, FieldLabel } from "../ui/field";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PlayerCombobox } from "./PlayerCombobox";
-import { usePersons } from "@/hooks/usePersons";
-import { TSCombobox } from "../design-system/TSCombobox";
-import type { Person } from "@/services/persons";
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import DatePicker from '@/components/booking/DatePicker';
+import { TimePicker } from '@/components/booking/TimePicker';
+import { CourtCombobox } from '@/components/booking/CourtCombobox';
+import { type Court, type CreateReservationData } from '@/services/courts';
+import { setHours, setMilliseconds, setMinutes, setSeconds } from 'date-fns';
+import { Field, FieldError, FieldLabel } from '../ui/field';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlayerCombobox } from './PlayerCombobox';
+import { usePersons } from '@/hooks/usePersons';
+import { TSCombobox } from '../design-system/TSCombobox';
+import type { Person } from '@/services/persons';
 import {
   Select,
   SelectContent,
@@ -21,21 +21,21 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from '../ui/select';
 import {
   ReservationFormSchema,
   type ReservationFormData,
   type ReservationInputData,
-} from "@/schemas/reservationSchemas";
-import { timeToMinutes } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+} from '@/schemas/reservationSchemas';
+import { timeToMinutes } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 export interface ReservationFormProps {
   onSubmit: (data: CreateReservationData) => void;
   onCancel: () => void;
   initialData?: Partial<ReservationInputData>;
   isLoading: boolean;
-  action?: "create" | "edit";
+  action?: 'create' | 'edit';
 }
 
 export const ReservationForm: React.FC<ReservationFormProps> = ({
@@ -43,32 +43,32 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   onCancel,
   initialData,
   isLoading = false,
-  action = "create",
+  action = 'create',
 }) => {
-  const t = useTranslations("Booking");
+  const t = useTranslations('Booking');
   const translateError = (message?: string) =>
     message ? t(message as Parameters<typeof t>[0]) : undefined;
 
   const getDefaultValues = () => {
-    const type = initialData?.type ?? "MATCH";
+    const type = initialData?.type ?? 'MATCH';
     const defaultValues = {
       court: initialData?.court || null,
       date: initialData?.date || new Date(),
-      startTime: initialData?.startTime || "09:00",
-      endTime: initialData?.endTime || "10:00",
+      startTime: initialData?.startTime || '09:00',
+      endTime: initialData?.endTime || '10:00',
       description: initialData?.description,
       players: initialData?.players || [],
     };
 
-    return type === "MATCH"
+    return type === 'MATCH'
       ? {
           ...defaultValues,
-          type: "MATCH" as const,
+          type: 'MATCH' as const,
           coach: null,
         }
       : {
           ...defaultValues,
-          type: "LESSON" as const,
+          type: 'LESSON' as const,
           coach: (initialData as any)?.coach || null,
         };
   };
@@ -84,7 +84,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     resolver: zodResolver(ReservationFormSchema),
   });
 
-  const { persons: coaches, isLoading: isLoadingCoaches } = usePersons("COACH");
+  const { persons: coaches, isLoading: isLoadingCoaches } = usePersons('COACH');
 
   const calculateDuration = (startTime: string, endTime: string): number => {
     const startMinutes = timeToMinutes(startTime);
@@ -96,8 +96,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     const startDateTime = setMilliseconds(
       setSeconds(
         setMinutes(
-          setHours(data.date, parseInt(data.startTime.split(":")[0])),
-          parseInt(data.startTime.split(":")[1]),
+          setHours(data.date, parseInt(data.startTime.split(':')[0])),
+          parseInt(data.startTime.split(':')[1]),
         ),
         0,
       ),
@@ -123,24 +123,24 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel>{t("type")}</FieldLabel>
+            <FieldLabel>{t('type')}</FieldLabel>
             <Select
               value={field.value}
               onValueChange={(val) => {
-                if (val === "MATCH") {
-                  setValue("coach", null);
+                if (val === 'MATCH') {
+                  setValue('coach', null);
                 }
                 field.onChange(val);
               }}
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder={t("selectType")} />
+                <SelectValue placeholder={t('selectType')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectLabel>{t("type")}</SelectLabel>
-                  <SelectItem value="MATCH">{t("match")}</SelectItem>
-                  <SelectItem value="LESSON">{t("lesson")}</SelectItem>
+                  <SelectLabel>{t('type')}</SelectLabel>
+                  <SelectItem value="MATCH">{t('match')}</SelectItem>
+                  <SelectItem value="LESSON">{t('lesson')}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -153,7 +153,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel>{t("court")}</FieldLabel>
+            <FieldLabel>{t('court')}</FieldLabel>
             <CourtCombobox
               value={field.value}
               onValueChange={(court: Court | null) => field.onChange(court)}
@@ -168,8 +168,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           control={control}
           render={({ field }) => (
             <Field className="flex-2">
-              <FieldLabel>{t("date")}</FieldLabel>
-              <Datepicker
+              <FieldLabel>{t('date')}</FieldLabel>
+              <DatePicker
                 date={field.value}
                 onDateChange={(date) => field.onChange(date || new Date())}
               />
@@ -184,7 +184,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           render={({ field }) => (
             <Field className="flex-1">
               <TimePicker
-                label={t("start")}
+                label={t('start')}
                 value={field.value}
                 onChange={(time) => field.onChange(time)}
               />
@@ -201,7 +201,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           render={({ field }) => (
             <Field className="flex-1">
               <TimePicker
-                label={t("end")}
+                label={t('end')}
                 value={field.value}
                 onChange={(time) => field.onChange(time)}
               />
@@ -224,26 +224,26 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         }}
       />
 
-      {watch("type") === "LESSON" && (
+      {watch('type') === 'LESSON' && (
         <Controller
           name="coach"
           control={control}
           render={({ field }) => (
             <Field>
-              <FieldLabel>{t("coachField")}</FieldLabel>
+              <FieldLabel>{t('coachField')}</FieldLabel>
               <TSCombobox
                 items={coaches}
                 value={field.value || null}
                 onValueChange={(coach: Person | null) => field.onChange(coach)}
                 placeholder={
-                  isLoadingCoaches ? t("loadingCoaches") : t("selectCoach")
+                  isLoadingCoaches ? t('loadingCoaches') : t('selectCoach')
                 }
                 itemToStringLabel={(coach) => coach.name}
                 itemToStringValue={(coach) => coach.id.toString()}
                 isItemEqualToValue={(coach, anotherCoach) =>
                   coach.id === anotherCoach.id
                 }
-                emptyMessage={t("noCoaches")}
+                emptyMessage={t('noCoaches')}
               />
               <FieldError>{translateError(errors.coach?.message)}</FieldError>
             </Field>
@@ -256,7 +256,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         control={control}
         render={({ field }) => (
           <Field>
-            <FieldLabel htmlFor="description">{t("description")}</FieldLabel>{" "}
+            <FieldLabel htmlFor="description">{t('description')}</FieldLabel>{' '}
             <Input {...field} />
             <FieldError>
               {translateError(errors.description?.message)}
@@ -272,10 +272,10 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
           onClick={onCancel}
           disabled={isLoading}
         >
-          {t("cancel")}
+          {t('cancel')}
         </Button>
         <Button type="submit" disabled={isLoading || !isValid}>
-          {t(action === "create" ? "create" : "edit")}
+          {t(action === 'create' ? 'create' : 'edit')}
         </Button>
       </div>
     </form>
