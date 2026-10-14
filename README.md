@@ -12,9 +12,9 @@ This repo contains the frontend of Tennis Sheet, a web application designed to m
 - **Admin Panel**: Tools for administrators to add/edit courts, manage reservations, and user permissions.
 
 ## Tech stack
+- Routing & SSR: [Next.js](https://nextjs.org/).
 - Styling: [Tailwind CSS](https://tailwindcss.com/).
-- Design system: [Shadcn](https://ui.shadcn.com/).
-- Routing: [TanStack Router](https://tanstack.com/router). 
+- Design system: [Shadcn](https://ui.shadcn.com/). 
 
 ## Getting Started
 
