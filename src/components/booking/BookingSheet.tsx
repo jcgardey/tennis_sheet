@@ -1,7 +1,7 @@
 'use client';
 
 import TimeColumn from '@/components/booking/TimeColumn';
-import { CourtGrid } from '@/components/booking/CourtGrid';
+import CourtGrid from '@/components/booking/CourtGrid';
 import type { Court, CreateReservationData } from '@/services/courts';
 import { Card } from '@/components/ui/card';
 import dayjs, { type Dayjs } from 'dayjs';

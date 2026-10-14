@@ -33,8 +33,7 @@
 
   --radius: 0.625rem;
 
-  --match: oklch(0.726 0.222 41.116);
-  --match-foreground: oklch(0.25 0.01 41.116);
+  --match: oklch(0.55 0 0);
   
 }
 
