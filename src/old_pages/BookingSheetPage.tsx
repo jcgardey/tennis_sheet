@@ -8,7 +8,7 @@ import {
   type CreateReservationData,
 } from '@/services/courts';
 import { Card } from '@/components/ui/card';
-import dayjs, { Dayjs } from 'dayjs';
+import { addHours, format, setHours, setMinutes } from 'date-fns';
 import { useState } from 'react';
 import { Datepicker } from '@/components/booking/DatePicker';
 import { CreateReservationModal } from '@/components/booking/CreateReservationModal';
@@ -20,7 +20,7 @@ import { Text } from '@/components/design-system/Text';
 import type { ReservationInputData } from '@/schemas/reservationSchemas';
 
 export default function BookingSheet() {
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const [matchInitialData, setMatchInitialData] = useState<
@@ -36,7 +36,7 @@ export default function BookingSheet() {
   const { isPending: isCreatingReservation, mutateAsync: createReservation } =
     useCreateReservation();
 
-  const handleDateChange = (date: Dayjs | null) => {
+  const handleDateChange = (date: Date | null) => {
     if (date) {
       setSelectedDate(date);
     }
@@ -53,11 +53,16 @@ export default function BookingSheet() {
 
   const handleFreeSlotClick = (startTime: string, court: Court) => {
     console.log(startTime);
-    const endTime = selectedDate
-      .set('hour', parseInt(startTime.split(':')[0]))
-      .set('minute', parseInt(startTime.split(':')[1]))
-      .add(1, 'hour')
-      .format('HH:mm');
+    const endTime = format(
+      addHours(
+        setMinutes(
+          setHours(selectedDate, parseInt(startTime.split(':')[0])),
+          parseInt(startTime.split(':')[1]),
+        ),
+        1,
+      ),
+      'HH:mm',
+    );
     setMatchInitialData({ startTime, endTime, court });
     setIsCreateModalOpen(true);
   };

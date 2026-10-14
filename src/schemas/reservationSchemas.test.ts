@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { describe, expect, it } from "vitest";
 import { ReservationFormSchema } from "./reservationSchemas";
 
@@ -7,7 +6,7 @@ describe("ReservationFormSchema", () => {
     const result = ReservationFormSchema.safeParse({
       type: "MATCH",
       court: null,
-      date: dayjs("2025-06-01"),
+      date: new Date("2025-06-01"),
       startTime: "09:00",
       endTime: "10:00",
       description: "Match",

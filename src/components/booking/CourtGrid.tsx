@@ -1,12 +1,11 @@
 import type { Court } from '@/services/courts';
-import { Dayjs } from 'dayjs';
 import { MapPin } from 'lucide-react';
 import { Text } from '../design-system/Text';
 import CourtReservations from './CourtReservations';
 
 interface CourtGridProps {
   court: Court;
-  date: Dayjs;
+  date: Date;
   onFreeSlotClick: (startTime: string, court: Court) => void;
 }
 

@@ -1,5 +1,5 @@
 import api from '@/lib/api';
-import dayjs, { Dayjs } from 'dayjs';
+import { format } from 'date-fns';
 import type { Person } from './persons';
 
 export interface Court {
@@ -14,7 +14,7 @@ export const getAllCourts = async (): Promise<Court[]> => {
 
 export interface Reservation {
   id: number;
-  start: Dayjs;
+  start: Date;
   durationMinutes: number;
   description: string;
   colorCode: string;
@@ -24,7 +24,7 @@ export interface Reservation {
 }
 
 export interface CreateReservationData {
-  start: Dayjs;
+  start: Date;
   durationMinutes: number;
   description?: string;
   courtId: number;
@@ -35,7 +35,7 @@ export interface CreateReservationData {
 
 export interface UpdateReservationData {
   id: number;
-  start: Dayjs;
+  start: Date;
   durationMinutes: number;
   description?: string;
   courtId: number;
@@ -54,14 +54,14 @@ export const createReservation = async (
 
 export const getReservationsByCourtAndDate = async (
   courtId: number,
-  date: Dayjs,
+  date: Date,
 ): Promise<Reservation[]> => {
   const res = await api.get<Reservation[]>(
-    `/courts/${courtId}/reservations?date=${date.format('YYYY-MM-DD')}`,
+    `/courts/${courtId}/reservations?date=${format(date, 'yyyy-MM-dd')}`,
   );
   return res.data.map((reservation) => ({
     ...reservation,
-    start: dayjs(reservation.start),
+    start: new Date(reservation.start),
   }));
 };
 
@@ -74,6 +74,6 @@ export const updateReservation = async (
   });
   return {
     ...response.data,
-    start: dayjs(response.data.start),
+    start: new Date(response.data.start),
   };
 };

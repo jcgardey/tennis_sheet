@@ -1,5 +1,4 @@
 import { timeToMinutes } from "@/lib/utils";
-import dayjs, { Dayjs } from "dayjs";
 import { z } from "zod";
 
 // Validation messages are translation keys from the 'Booking' namespace.
@@ -18,7 +17,10 @@ const baseReservationSchema = z.object({
     .object({ id: z.number(), name: z.string() })
     .nullable()
     .refine((value) => value !== null, { message: "courtRequired" }),
-  date: z.custom<Dayjs>((value) => dayjs.isDayjs(value), "dateRequired"),
+  date: z.custom<Date>(
+    (value) => value instanceof Date && !isNaN(value.getTime()),
+    "dateRequired",
+  ),
   startTime: z.string().regex(TIME_REGEX, "startTimeInvalid"),
   endTime: z.string().regex(TIME_REGEX, "endTimeInvalid"),
   description: z.string().max(100, "descriptionTooLong").optional(),

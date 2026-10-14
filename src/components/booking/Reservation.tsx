@@ -14,6 +14,7 @@ import { ReservationForm } from './ReservationForm';
 import { useUpdateReservation } from '@/hooks/useUpdateReservation';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { addMinutes, format } from 'date-fns';
 
 interface ReservationProps {
   reservation: Reservation;
@@ -34,10 +35,11 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
     const defaultValues = {
       court: reservation.court,
       date: reservation.start,
-      startTime: reservation.start.format('HH:mm'),
-      endTime: reservation.start
-        .add(reservation.durationMinutes, 'minute')
-        .format('HH:mm'),
+      startTime: format(reservation.start, 'HH:mm'),
+      endTime: format(
+        addMinutes(reservation.start, reservation.durationMinutes),
+        'HH:mm',
+      ),
       description: reservation.description ?? '',
       players: reservation.players,
     };

@@ -24,7 +24,7 @@ export const useCreateReservation = () => {
           year: 'numeric',
           hour: 'numeric',
           minute: '2-digit',
-        }).format(dataSent.start.toDate()),
+        }).format(dataSent.start),
       });
     },
     onError: () => {

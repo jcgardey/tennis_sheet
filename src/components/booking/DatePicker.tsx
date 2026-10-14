@@ -11,8 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
 import { useLocale, useTranslations } from 'next-intl';
 import { enUS, es } from 'date-fns/locale';
 import { format, isValid, parse } from 'date-fns';
@@ -28,8 +26,8 @@ function formatDate(date: Date | undefined, locale: string) {
 }
 
 interface DatepickerProps {
-  date: Dayjs | null;
-  onDateChange: (date: Dayjs | null) => void;
+  date: Date | null;
+  onDateChange: (date: Date | null) => void;
 }
 
 export const Datepicker: React.FC<DatepickerProps> = ({
@@ -41,14 +39,14 @@ export const Datepicker: React.FC<DatepickerProps> = ({
   const [open, setOpen] = React.useState(false);
 
   const [month, setMonth] = React.useState<Date | undefined>(
-    date ? date.toDate() : undefined
+    date ?? undefined
   );
   const [value, setValue] = React.useState(
-    formatDate(date ? date.toDate() : undefined, locale)
+    formatDate(date ?? undefined, locale)
   );
 
   React.useEffect(() => {
-    setValue(formatDate(date?.toDate(), locale));
+    setValue(formatDate(date ?? undefined, locale));
   }, [date, locale]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,14 +55,13 @@ export const Datepicker: React.FC<DatepickerProps> = ({
     });
     setValue(e.target.value);
     if (isValid(parsedDate)) {
-      const nextDate = dayjs(parsedDate);
-      onDateChange(nextDate);
+      onDateChange(parsedDate);
       setMonth(parsedDate);
     }
   };
 
   const handleDateSelect = (date: Date | undefined) => {
-    onDateChange(date ? dayjs(date) : null);
+    onDateChange(date ?? null);
     setValue(formatDate(date, locale));
     setOpen(false);
   };
@@ -104,7 +101,7 @@ export const Datepicker: React.FC<DatepickerProps> = ({
           <Calendar
             mode="single"
             locale={locale === 'es' ? es : enUS}
-            selected={date?.toDate()}
+            selected={date ?? undefined}
             captionLayout="dropdown"
             month={month}
             onMonthChange={setMonth}

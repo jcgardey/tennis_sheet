@@ -13,12 +13,12 @@ import {
 } from '@/consts/booking';
 import { TimeSlot } from './TimeSlot';
 import { ReservationComponent } from './Reservation';
-import type { Dayjs } from 'dayjs';
+import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';
 
 interface CourtReservationsProps {
   court: Court;
-  date: Dayjs;
+  date: Date;
   onFreeSlotClick: (startTime: string, court: Court) => void;
 }
 
@@ -32,7 +32,7 @@ export default function CourtReservations({
     isLoading,
     error,
   } = useQuery<Reservation[], Error>({
-    queryKey: ['reservations', court.id, date.format('YYYY-MM-DD')],
+    queryKey: ['reservations', court.id, format(date, 'yyyy-MM-dd')],
     queryFn: () => getReservationsByCourtAndDate(court.id, date),
   });
   const t = useTranslations('Booking');
@@ -40,14 +40,14 @@ export default function CourtReservations({
   const getReservationSlots = (reservation: Reservation) =>
     reservation.durationMinutes / SLOT_DURATION_MINUTES;
 
-  const calculateTopOffset = (reservationStartTime: Dayjs) => {
+  const calculateTopOffset = (reservationStartTime: Date) => {
     const firstSlotTime = TIME_SLOTS[0];
     const [firstHour, firstMinute] = firstSlotTime.split(':').map(Number);
     const firstSlotMinutes = firstHour * 60 + firstMinute;
 
-    const reservationHour = reservationStartTime.hour();
+    const reservationHour = reservationStartTime.getHours();
     const reservationMinutes =
-      reservationHour * 60 + reservationStartTime.minute();
+      reservationHour * 60 + reservationStartTime.getMinutes();
 
     const minutesDifference = reservationMinutes - firstSlotMinutes;
     const slotsFromTop = minutesDifference / SLOT_DURATION_MINUTES;

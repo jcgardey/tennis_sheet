@@ -4,7 +4,7 @@ import TimeColumn from '@/components/booking/TimeColumn';
 import CourtGrid from '@/components/booking/CourtGrid';
 import type { Court, CreateReservationData } from '@/services/courts';
 import { Card } from '@/components/ui/card';
-import dayjs, { type Dayjs } from 'dayjs';
+import { addHours, format, setHours, setMinutes } from 'date-fns';
 import { useState } from 'react';
 import { Datepicker } from '@/components/booking/DatePicker';
 import { CreateReservationModal } from '@/components/booking/CreateReservationModal';
@@ -20,7 +20,7 @@ interface BookingSheetClientProps {
 
 export default function BookingSheet({ courts }: BookingSheetClientProps) {
   const t = useTranslations('Booking');
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [matchInitialData, setMatchInitialData] = useState<
     Partial<ReservationInputData>
@@ -29,7 +29,7 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
   const { isPending: isCreatingReservation, mutateAsync: createReservation } =
     useCreateReservation();
 
-  const handleDateChange = (date: Dayjs | null) => {
+  const handleDateChange = (date: Date | null) => {
     if (date) {
       setSelectedDate(date);
     }
@@ -46,11 +46,10 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
 
   const handleFreeSlotClick = (startTime: string, court: Court) => {
     const [hour, minute] = startTime.split(':').map(Number);
-    const endTime = selectedDate
-      .set('hour', hour)
-      .set('minute', minute)
-      .add(1, 'hour')
-      .format('HH:mm');
+    const endTime = format(
+      addHours(setMinutes(setHours(selectedDate, hour), minute), 1),
+      'HH:mm',
+    );
     setMatchInitialData({ startTime, endTime, court });
     setIsCreateModalOpen(true);
   };

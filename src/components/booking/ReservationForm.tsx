@@ -5,7 +5,7 @@ import { Datepicker } from "@/components/booking/DatePicker";
 import { TimePicker } from "@/components/booking/TimePicker";
 import { CourtCombobox } from "@/components/booking/CourtCombobox";
 import { type Court, type CreateReservationData } from "@/services/courts";
-import dayjs from "dayjs";
+import { setHours, setMilliseconds, setMinutes, setSeconds } from "date-fns";
 import { Field, FieldError, FieldLabel } from "../ui/field";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,7 +53,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     const type = initialData?.type ?? "MATCH";
     const defaultValues = {
       court: initialData?.court || null,
-      date: initialData?.date || dayjs(),
+      date: initialData?.date || new Date(),
       startTime: initialData?.startTime || "09:00",
       endTime: initialData?.endTime || "10:00",
       description: initialData?.description,
@@ -93,11 +93,16 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
   };
 
   const processForm = async (data: ReservationFormData) => {
-    const startDateTime = data.date
-      .hour(parseInt(data.startTime.split(":")[0]))
-      .minute(parseInt(data.startTime.split(":")[1]))
-      .second(0)
-      .millisecond(0);
+    const startDateTime = setMilliseconds(
+      setSeconds(
+        setMinutes(
+          setHours(data.date, parseInt(data.startTime.split(":")[0])),
+          parseInt(data.startTime.split(":")[1]),
+        ),
+        0,
+      ),
+      0,
+    );
 
     const reservationData: CreateReservationData = {
       courtId: data.court.id,
@@ -166,7 +171,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
               <FieldLabel>{t("date")}</FieldLabel>
               <Datepicker
                 date={field.value}
-                onDateChange={(date) => field.onChange(date || dayjs())}
+                onDateChange={(date) => field.onChange(date || new Date())}
               />
               <FieldError>{translateError(errors.date?.message)}</FieldError>
             </Field>
