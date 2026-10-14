@@ -4,7 +4,14 @@ import TimeColumn from '@/components/booking/TimeColumn';
 import CourtGrid from '@/components/booking/CourtGrid';
 import type { Court, CreateReservationData } from '@/services/courts';
 import { Card } from '@/components/ui/card';
-import { addHours, format, setHours, setMinutes } from 'date-fns';
+import {
+  addDays,
+  addHours,
+  format,
+  setHours,
+  setMinutes,
+  subDays,
+} from 'date-fns';
 import { useState } from 'react';
 import DatePicker from '@/components/booking/DatePicker';
 import { CreateReservationModal } from '@/components/booking/CreateReservationModal';
@@ -13,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import type { ReservationInputData } from '@/schemas/reservationSchemas';
 import { useTranslations } from 'next-intl';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BookingSheetClientProps {
   courts: Court[];
@@ -57,8 +65,29 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
   return (
     <>
       <div className="flex flex-wrap items-center gap-4 py-4">
-        <div className="w-full sm:w-1/5">
+        <div className="flex items-center gap-2">
           <DatePicker date={selectedDate} onDateChange={handleDateChange} />
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={() => setSelectedDate(subDays(selectedDate, 1))}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSelectedDate(new Date())}
+          >
+            {t('today')}
+          </Button>
+          <Button
+            size="icon-sm"
+            variant="outline"
+            onClick={() => setSelectedDate(addDays(selectedDate, 1))}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
         <CreateReservationModal
           isOpen={isCreateModalOpen}
