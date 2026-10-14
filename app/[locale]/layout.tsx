@@ -44,8 +44,12 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale}>
-          <NavigationBar />
-          <AppProviders>{children}</AppProviders>
+          <AppProviders>
+            <NavigationBar />
+            <div className="min-h-screen p-8 font-sans text-foreground">
+              {children}
+            </div>
+          </AppProviders>
         </NextIntlClientProvider>
       </body>
     </html>

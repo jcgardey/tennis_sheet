@@ -4,7 +4,7 @@ import { Text } from '../design-system/Text';
 
 export default function TimeColumn() {
   return (
-    <div className="flex-none w-24 border-r border-border sticky left-0 z-20">
+    <div className="flex-none w-24 border-r border-border left-0 z-20">
       <div className="h-20 border-b border-border flex items-center justify-center text-muted-foreground">
         <Clock className="w-4 h-4" />
       </div>

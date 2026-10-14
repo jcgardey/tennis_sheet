@@ -13,19 +13,15 @@ export default async function BookingSheetPage() {
   ]);
 
   return (
-    <div className="min-h-screen font-sans text-foreground">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex flex-col gap-4 border-b border-border pb-4">
-          <Text variant="h1">{t('title')}</Text>
-        </div>
-        {courts === null ? (
-          <TSAlert status="error" message={t('errorLoadingCourts')} />
-        ) : courts.length === 0 ? (
-          <TSAlert status="warning" message={t('noCourts')} />
-        ) : (
-          <BookingSheet courts={courts} />
-        )}
-      </div>
+    <div className="mx-auto space-y-6">
+      <Text variant="h1">{t('title')}</Text>
+      {courts === null ? (
+        <TSAlert status="error" message={t('errorLoadingCourts')} />
+      ) : courts.length === 0 ? (
+        <TSAlert status="warning" message={t('noCourts')} />
+      ) : (
+        <BookingSheet courts={courts} />
+      )}
     </div>
   );
 }
