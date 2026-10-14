@@ -1,7 +1,7 @@
 import { getRequestConfig, type RequestConfig } from 'next-intl/server';
 import { DEFAULT_LOCALE, i18nNamespaces, locales, type Locale } from './types';
 
-export default getRequestConfig(async ({ locale: requestLocale }) => {
+export default getRequestConfig(async ({ requestLocale }) => {
   let requestedLocale = await requestLocale;
   if (!locales.includes(requestedLocale as Locale)) {
     requestedLocale = DEFAULT_LOCALE;
