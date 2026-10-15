@@ -6,6 +6,7 @@ import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
+  NavigationMenuLink,
 } from '@/components/ui/navigation-menu';
 import Link from 'next/link';
 
@@ -21,26 +22,30 @@ export const NavigationBar: React.FC = () => {
 
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem
-              render={
-                <Link
-                  href={`/sheet`}
-                  className={'[&.active]:text-accent-foreground'}
-                >
-                  {t('coaches')}
-                </Link>
-              }
-            />
-            <NavigationMenuItem
-              render={
-                <Link
-                  href={`/sheet`}
-                  className={'[&.active]:text-accent-foreground'}
-                >
-                  {t('courts')}
-                </Link>
-              }
-            />
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                render={
+                  <Link
+                    href={`/sheet`}
+                    className={'[&.active]:text-accent-foreground'}
+                  >
+                    {t('coaches')}
+                  </Link>
+                }
+              />
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                render={
+                  <Link
+                    href={`/sheet`}
+                    className={'[&.active]:text-accent-foreground'}
+                  >
+                    {t('courts')}
+                  </Link>
+                }
+              />
+            </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
         <LocaleSwitcher />
