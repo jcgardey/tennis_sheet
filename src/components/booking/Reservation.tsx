@@ -69,7 +69,7 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger
         render={
-          <div
+          <button
             className="p-1 cursor-pointer absolute left-0 right-0"
             style={{
               height: `${SLOT_HEIGHT * slots}px`,
@@ -100,7 +100,7 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
                 </Text>
               )}
             </div>
-          </div>
+          </button>
         }
       />
 
