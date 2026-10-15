@@ -4,6 +4,7 @@ import TimeColumn from '@/components/booking/TimeColumn';
 import CourtGrid from '@/components/booking/CourtGrid';
 import type { Court, CreateReservationData } from '@/services/courts';
 import { Card } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   addDays,
   addHours,
@@ -21,6 +22,7 @@ import { Spinner } from '@/components/ui/spinner';
 import type { ReservationInputData } from '@/schemas/reservationSchemas';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface BookingSheetClientProps {
   courts: Court[];
@@ -33,6 +35,9 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
   const [matchInitialData, setMatchInitialData] = useState<
     Partial<ReservationInputData>
   >({});
+
+  const [selectedCourtId, setSelectedCourtId] = useState<string>();
+  const activeCourtId = selectedCourtId ?? String(courts[0]?.id);
 
   const { isPending: isCreatingReservation, mutateAsync: createReservation } =
     useCreateReservation();
@@ -102,6 +107,20 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
         </Button>
       </div>
 
+      <Tabs
+        value={activeCourtId}
+        onValueChange={setSelectedCourtId}
+        className="md:hidden pb-4"
+      >
+        <TabsList className="w-full overflow-x-auto justify-start">
+          {courts.map((court) => (
+            <TabsTrigger key={court.id} value={String(court.id)}>
+              {court.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+
       <Card className="py-0">
         <div className="flex overflow-x-auto">
           <TimeColumn />
@@ -111,6 +130,9 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
               court={court}
               date={selectedDate}
               onFreeSlotClick={handleFreeSlotClick}
+              className={cn({
+                'hidden md:block': String(court.id) !== activeCourtId,
+              })}
             />
           ))}
         </div>

@@ -46,7 +46,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale}>
           <AppProviders>
             <NavigationBar />
-            <div className="min-h-screen p-8 font-sans text-foreground">
+            <div className="min-h-screen p-4 md:p-8 font-sans text-foreground">
               {children}
             </div>
           </AppProviders>
