@@ -76,16 +76,17 @@ export default function DatePicker({ date, onDateChange }: DatePickerProps) {
         }}
       />
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            id="date-picker"
-            variant="ghost"
-            className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
-          >
-            <CalendarIcon className="size-3.5" />
-            <span className="sr-only">{t('chooseDate')}</span>
-          </Button>
-        </PopoverTrigger>
+        <PopoverTrigger
+          render={
+            <Button
+              variant="ghost"
+              className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+            >
+              <CalendarIcon className="size-3.5" />
+              <span className="sr-only">{t('chooseDate')}</span>
+            </Button>
+          }
+        />
         <PopoverContent
           className="w-auto overflow-hidden p-0"
           align="end"

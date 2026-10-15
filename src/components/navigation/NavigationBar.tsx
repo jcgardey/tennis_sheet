@@ -21,23 +21,26 @@ export const NavigationBar: React.FC = () => {
 
         <NavigationMenu>
           <NavigationMenuList>
-            <NavigationMenuItem asChild>
-              <Link
-                href={`/sheet`}
-                className={'[&.active]:text-accent-foreground'}
-              >
-                {t('courts')}
-              </Link>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem asChild>
-              <Link
-                href={`/sheet`}
-                className={'[&.active]:text-accent-foreground'}
-              >
-                {t('coaches')}
-              </Link>
-            </NavigationMenuItem>
+            <NavigationMenuItem
+              render={
+                <Link
+                  href={`/sheet`}
+                  className={'[&.active]:text-accent-foreground'}
+                >
+                  {t('coaches')}
+                </Link>
+              }
+            />
+            <NavigationMenuItem
+              render={
+                <Link
+                  href={`/sheet`}
+                  className={'[&.active]:text-accent-foreground'}
+                >
+                  {t('courts')}
+                </Link>
+              }
+            />
           </NavigationMenuList>
         </NavigationMenu>
         <LocaleSwitcher />

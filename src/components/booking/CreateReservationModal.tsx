@@ -44,9 +44,9 @@ export const CreateReservationModal: React.FC<CreateReservationModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-h-screen">
         <DialogHeader>
-          <DialogTitle asChild>
-            <Text variant="h2">{t('newReservation')}</Text>
-          </DialogTitle>
+          <DialogTitle
+            render={<Text variant="h2">{t('newReservation')}</Text>}
+          />
         </DialogHeader>
         <ScrollArea className="h-[400px] pr-4">
           <ReservationForm

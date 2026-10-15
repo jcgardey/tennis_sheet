@@ -67,38 +67,43 @@ export const ReservationComponent: React.FC<ReservationProps> = ({
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <div
-          className="p-1 cursor-pointer absolute left-0 right-0"
-          style={{
-            height: `${SLOT_HEIGHT * slots}px`,
-            top: `${timeOffset}px`,
-            zIndex: 10,
-          }}
-        >
+      <DialogTrigger
+        render={
           <div
-            className="h-full border text-muted rounded-lg p-3 shadow-sm flex flex-col justify-center gap-2 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-300"
+            className="p-1 cursor-pointer absolute left-0 right-0"
             style={{
-              backgroundColor: `var(--${reservation.colorCode})`,
-              borderColor: `var(--${reservation.colorCode})`,
+              height: `${SLOT_HEIGHT * slots}px`,
+              top: `${timeOffset}px`,
+              zIndex: 10,
             }}
           >
-            <div className="flex items-center gap-1.5 font-bold text-sm truncate">
-              <User className="w-3.5 h-3.5" />{' '}
-              <Text variant="small">
-                {reservation.players.length > 0
-                  ? reservation.players.map((player) => player.name).join(' - ')
-                  : reservation.description}
-              </Text>
+            <div
+              className="h-full border text-muted rounded-lg p-3 shadow-sm flex flex-col justify-center gap-2 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-300"
+              style={{
+                backgroundColor: `var(--${reservation.colorCode})`,
+                borderColor: `var(--${reservation.colorCode})`,
+              }}
+            >
+              <div className="flex items-center gap-1.5 font-bold text-sm truncate">
+                <User className="w-3.5 h-3.5" />{' '}
+                <Text variant="small">
+                  {reservation.players.length > 0
+                    ? reservation.players
+                        .map((player) => player.name)
+                        .join(' - ')
+                    : reservation.description}
+                </Text>
+              </div>
+              {reservation.coach && (
+                <Text variant="small">
+                  {t('coach', { name: reservation.coach.name })}
+                </Text>
+              )}
             </div>
-            {reservation.coach && (
-              <Text variant="small">
-                {t('coach', { name: reservation.coach.name })}
-              </Text>
-            )}
           </div>
-        </div>
-      </DialogTrigger>
+        }
+      />
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('editReservation')}</DialogTitle>
