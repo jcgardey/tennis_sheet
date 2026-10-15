@@ -3,7 +3,6 @@
   "errorLoadingCourts": "Error while loading courts",
   "noCourts": "No courts available",
   "errorLoadingReservations": "Error loading reservations",
-  "createReservation": "Create reservation",
   "newReservation": "New reservation",
   "editReservation": "Edit reservation",
   "coach": "Coach: {name}",

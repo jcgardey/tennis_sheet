@@ -3,7 +3,6 @@
   "errorLoadingCourts": "Error al cargar las canchas",
   "noCourts": "No hay canchas disponibles",
   "errorLoadingReservations": "Error al cargar las reservas",
-  "createReservation": "Crear reserva",
   "newReservation": "Nueva reserva",
   "editReservation": "Editar reserva",
   "coach": "Profesor: {name}",

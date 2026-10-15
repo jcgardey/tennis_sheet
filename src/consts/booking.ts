@@ -1,4 +1,4 @@
-export const SLOT_HEIGHT = 48; // Altura en px (h-12 de Tailwind)
+export const SLOT_HEIGHT = 36; // Altura en px (h-12 de Tailwind)
 
 export const START_HOUR = 8;
 export const END_HOUR = 22;

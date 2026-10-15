@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import type { ReservationInputData } from '@/schemas/reservationSchemas';
 import { useTranslations } from 'next-intl';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface BookingSheetClientProps {
@@ -69,7 +69,7 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center gap-4 py-4">
+      <div className="flex flex-wrap items-center gap-4">
         <div className="flex items-center gap-2">
           <DatePicker date={selectedDate} onDateChange={handleDateChange} />
           <Button
@@ -101,16 +101,22 @@ export default function BookingSheet({ courts }: BookingSheetClientProps) {
           isLoading={isCreatingReservation}
           initialData={matchInitialData}
         />
-        <Button onClick={handleShowReservationModal}>
-          {t('createReservation')}
-          {isCreatingReservation && <Spinner className="ml-2 size-4" />}
+        <Button
+          className="fixed bottom-6 right-6 z-50 hover:cursor-pointer h-14 w-14 rounded-full shadow-lg"
+          onClick={handleShowReservationModal}
+        >
+          {isCreatingReservation ? (
+            <Spinner className="ml-2 size-4" />
+          ) : (
+            <Plus className="h-6 w-6" />
+          )}
         </Button>
       </div>
 
       <Tabs
         value={activeCourtId}
         onValueChange={setSelectedCourtId}
-        className="md:hidden pb-4"
+        className="md:hidden"
       >
         <TabsList className="w-full overflow-x-auto justify-start">
           {courts.map((court) => (

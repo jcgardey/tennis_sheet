@@ -13,7 +13,7 @@ export default async function BookingSheetPage() {
   ]);
 
   return (
-    <div className="mx-auto space-y-6">
+    <div className="mx-auto space-y-5">
       <Text variant="h1">{t('title')}</Text>
       {courts === null ? (
         <TSAlert status="error" message={t('errorLoadingCourts')} />
