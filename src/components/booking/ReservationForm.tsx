@@ -73,6 +73,11 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         };
   };
 
+  const reservationTypes = [
+    { value: 'MATCH', label: t('match') },
+    { value: 'LESSON', label: t('lesson') },
+  ];
+
   const {
     handleSubmit,
     formState: { errors, isValid },
@@ -132,15 +137,19 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                 }
                 field.onChange(val);
               }}
+              items={reservationTypes}
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder={t('selectType')} />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>{t('type')}</SelectLabel>
-                  <SelectItem value="MATCH">{t('match')}</SelectItem>
-                  <SelectItem value="LESSON">{t('lesson')}</SelectItem>
+                  {reservationTypes.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      {type.label}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
